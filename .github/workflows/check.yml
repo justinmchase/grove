@@ -1,0 +1,20 @@
+name: check
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  check:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-deno@v1
+        with:
+          deno-version: v1.x
+      
+      - run: deno fmt --check
+      - run: deno lint
+      - run: deno cache deps/mod.ts
+      - run: deno test
