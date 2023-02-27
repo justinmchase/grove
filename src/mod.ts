@@ -1,3 +1,5 @@
+export { Application, Request, Response, Router, Status } from "../deps/oak.ts";
+
 export * from "./context.ts";
 export * from "./grove.ts";
 
