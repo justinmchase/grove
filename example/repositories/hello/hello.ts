@@ -6,4 +6,4 @@ export type Hello = {
   punctuation: Punctuation;
   greeting: string;
   createdAt: Date;
-}
+};

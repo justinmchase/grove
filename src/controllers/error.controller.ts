@@ -1,5 +1,5 @@
 import { Application, Context, Status } from "../../deps/oak.ts";
-import { IServices, IContext, IState } from "../context.ts";
+import { IContext, IServices, IState } from "../context.ts";
 import { Controller } from "./controller.ts";
 import { ILoggingService } from "../services/mod.ts";
 

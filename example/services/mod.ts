@@ -1,4 +1,8 @@
-import { IServices, ConsoleLoggingService, ILoggingService } from "../../src/mod.ts";
+import {
+  ConsoleLoggingService,
+  ILoggingService,
+  IServices,
+} from "../../src/mod.ts";
 import { DbService } from "./db/mod.ts";
 
 export * from "./db/mod.ts";

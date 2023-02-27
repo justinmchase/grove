@@ -1,5 +1,5 @@
 import { Application } from "../../deps/oak.ts";
-import { IServices, IContext, IState } from "../context.ts";
+import { IContext, IServices, IState } from "../context.ts";
 
 export abstract class Controller<
   TServices extends IServices,

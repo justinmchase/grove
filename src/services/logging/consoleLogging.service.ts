@@ -1,5 +1,13 @@
 import { snakeCase } from "../../../deps/case.ts";
-import { yellow, blue, bgBlue, red, brightWhite, bgRed, brightBlack } from "../../../deps/std.ts"
+import {
+  bgBlue,
+  bgRed,
+  blue,
+  brightBlack,
+  brightWhite,
+  red,
+  yellow,
+} from "../../../deps/std.ts";
 import { toSerializable } from "../../util/serializable.ts";
 import { LoggingService, LogLevel } from "./logging.service.ts";
 
@@ -22,13 +30,13 @@ export class ConsoleLoggingService extends LoggingService {
         case LogLevel.Info:
           return brightBlack(level);
         case LogLevel.Warn:
-          return yellow(level)
+          return yellow(level);
         case LogLevel.Error:
-          return red(level)
+          return red(level);
         case LogLevel.Critical:
-          return bgRed(brightWhite(level))
+          return bgRed(brightWhite(level));
       }
-    })()
+    })();
     await console.log(`${l} ${n} ${m} ${d}`);
   }
 }

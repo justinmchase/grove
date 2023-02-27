@@ -1,4 +1,10 @@
-import { Application, HealthController, ErrorController, IsHtmlController, LogController } from "../../src/mod.ts";
+import {
+  Application,
+  ErrorController,
+  HealthController,
+  IsHtmlController,
+  LogController,
+} from "../../src/mod.ts";
 import { HelloController } from "./hello/mod.ts";
 import { Context, State } from "../context.ts";
 

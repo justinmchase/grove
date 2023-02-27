@@ -11,6 +11,6 @@ export async function initRepositories(services: Services) {
   const { db } = services;
   const hellos = new HelloRepository(db);
   return await {
-    hellos
+    hellos,
   };
 }

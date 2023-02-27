@@ -1,13 +1,12 @@
 import { accepts, Application, Request } from "../../deps/oak.ts";
 import { Controller } from "./controller.ts";
-import { IServices, IContext, IState } from "../context.ts";
+import { IContext, IServices, IState } from "../context.ts";
 
 export class IsHtmlController<
   TServices extends IServices,
   TContext extends IContext<TServices>,
   TState extends IState<TServices, TContext>,
 > implements Controller<TServices, TContext, TState> {
-
   public async use(app: Application<TState>): Promise<void> {
     app.use((ctx, next) => this.handler(ctx.request, ctx.state, next));
     await true;

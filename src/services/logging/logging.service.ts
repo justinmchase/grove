@@ -98,7 +98,7 @@ export abstract class LoggingService implements ILoggingService {
       error,
     });
   }
-  
+
   public async critical(
     name: string,
     message: string,
