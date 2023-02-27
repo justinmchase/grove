@@ -1,20 +1,23 @@
 import { Application, Context, Status } from "../../deps/oak.ts";
-import { IContext } from "../context.ts";
+import { IContext, IServices, IState } from "../context.ts";
 import { Controller } from "./controller.ts";
 import { ILoggingService } from "../services/mod.ts";
 
-export class ErrorController<TContext extends IContext>
-  extends Controller<TContext> {
+export class ErrorController<
+  TServices extends IServices,
+  TContext extends IContext<TServices>,
+  TState extends IState<TServices, TContext>,
+> extends Controller<TServices, TContext, TState> {
   constructor(private readonly logging: ILoggingService) {
     super();
   }
 
-  public async use(app: Application<TContext>): Promise<void> {
+  public async use(app: Application<TState>): Promise<void> {
     app.use(this.handler.bind(this));
     await undefined;
   }
 
-  private async handler(ctx: Context<TContext>, next: () => Promise<unknown>) {
+  private async handler(ctx: Context<TState>, next: () => Promise<unknown>) {
     try {
       await next();
     } catch (err) {

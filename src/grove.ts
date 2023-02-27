@@ -1,6 +1,6 @@
 import { Application, Request } from "../deps/oak.ts";
-import { ConsoleLoggingService, IServices } from "./services/services.ts";
-import { IContext, IState } from "./context.ts";
+import { ConsoleLoggingService } from "./services/mod.ts";
+import { IContext, IServices, IState } from "./context.ts";
 
 type InitApplicationContext<
   TServices extends IServices,
