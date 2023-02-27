@@ -40,6 +40,11 @@ export interface ILoggingService {
     error: Error,
     data?: Record<string, unknown>,
   ): Promise<void>;
+  critical(
+    name: string,
+    message: string,
+    data?: Record<string, unknown>,
+  ): Promise<void>;
 }
 
 export abstract class LoggingService implements ILoggingService {
@@ -81,6 +86,7 @@ export abstract class LoggingService implements ILoggingService {
   ) {
     await this.log(LogLevel.Info, name, message, data);
   }
+
   public async error(
     name: string,
     message: string,
@@ -91,5 +97,13 @@ export abstract class LoggingService implements ILoggingService {
       ...data,
       error,
     });
+  }
+  
+  public async critical(
+    name: string,
+    message: string,
+    data: Record<string, unknown> = {},
+  ) {
+    await this.log(LogLevel.Critical, name, message, data);
   }
 }
