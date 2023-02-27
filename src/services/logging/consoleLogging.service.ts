@@ -12,6 +12,11 @@ import { toSerializable } from "../../util/serializable.ts";
 import { LoggingService, LogLevel } from "./logging.service.ts";
 
 export class ConsoleLoggingService extends LoggingService {
+  private readonly isTTY: boolean;
+  constructor() {
+    super();
+    this.isTTY = Deno.isatty(Deno.stdout.rid);
+  }
   public async log(
     level: LogLevel,
     name: string,
@@ -22,19 +27,23 @@ export class ConsoleLoggingService extends LoggingService {
     const m = JSON.stringify((message ?? "").replace(/"/g, "'"));
     const d = JSON.stringify(toSerializable(data));
     const l = (() => {
-      switch (level) {
-        case LogLevel.Trace:
-          return bgBlue(level);
-        case LogLevel.Debug:
-          return blue(level);
-        case LogLevel.Info:
-          return brightBlack(level);
-        case LogLevel.Warn:
-          return yellow(level);
-        case LogLevel.Error:
-          return red(level);
-        case LogLevel.Critical:
-          return bgRed(brightWhite(level));
+      if (this.isTTY) {
+        switch (level) {
+          case LogLevel.Trace:
+            return bgBlue(level);
+          case LogLevel.Debug:
+            return blue(level);
+          case LogLevel.Info:
+            return brightBlack(level);
+          case LogLevel.Warn:
+            return yellow(level);
+          case LogLevel.Error:
+            return red(level);
+          case LogLevel.Critical:
+            return bgRed(brightWhite(level));
+        }
+      } else {
+        return level;
       }
     })();
     await console.log(`${l} ${n} ${m} ${d}`);
