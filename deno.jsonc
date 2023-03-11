@@ -1,6 +1,9 @@
 {
   "tasks": {
-    "test:watch": "deno test src --watch",
-    "example:watch": "deno run --watch --allow-net example/main.ts"
+    "test": "deno test src",
+    "example": "deno run -A example/main.ts",
+    "example:web": "deno run -A example/main.ts web",
+    "watch:test": "deno test src --watch",
+    "watch:example:web": "deno run --watch -A example/main.ts"
   }
 }

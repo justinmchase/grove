@@ -1,53 +1,7 @@
-export enum LogLevel {
-  Trace = "T",
-  Debug = "D",
-  Warn = "W",
-  Info = "I",
-  Error = "E",
-  Critical = "C",
-}
+import { LogLevel } from "./logLevel.ts";
+import { ILogger } from "./logger.interface.ts";
 
-export interface ILoggingService {
-  log(
-    level: LogLevel,
-    name: string,
-    message: string,
-    data?: Record<string, unknown>,
-  ): Promise<void>;
-  trace(
-    name: string,
-    message: string,
-    data?: Record<string, unknown>,
-  ): Promise<void>;
-  debug(
-    name: string,
-    message: string,
-    data?: Record<string, unknown>,
-  ): Promise<void>;
-  warn(
-    name: string,
-    message: string,
-    data?: Record<string, unknown>,
-  ): Promise<void>;
-  info(
-    name: string,
-    message: string,
-    data?: Record<string, unknown>,
-  ): Promise<void>;
-  error(
-    name: string,
-    message: string,
-    error: Error,
-    data?: Record<string, unknown>,
-  ): Promise<void>;
-  critical(
-    name: string,
-    message: string,
-    data?: Record<string, unknown>,
-  ): Promise<void>;
-}
-
-export abstract class LoggingService implements ILoggingService {
+export abstract class Logger implements ILogger {
   public abstract log(
     level: LogLevel,
     name: string,

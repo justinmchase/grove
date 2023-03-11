@@ -1,12 +1,11 @@
 import { Application, Response, Router, Status } from "../../deps/oak.ts";
-import { IContext, IServices, IState } from "../context.ts";
+import { IContext, IState } from "../context.ts";
 import { Controller } from "./controller.ts";
 
 export class HealthController<
-  TServices extends IServices,
-  TContext extends IContext<TServices>,
-  TState extends IState<TServices, TContext>,
-> implements Controller<TServices, TContext, TState> {
+  TContext extends IContext,
+  TState extends IState<TContext>,
+> implements Controller<TContext, TState> {
   public async use(app: Application<TState>): Promise<void> {
     const router = new Router();
     router.get(

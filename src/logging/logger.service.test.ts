@@ -1,9 +1,9 @@
-import { assertSpyCall, assertSpyCalls, stub } from "../../../deps/std.ts";
-import { ISerializable } from "../../util/serializable.ts";
-import { ConsoleLoggingService } from "./consoleLogging.service.ts";
-import { LogLevel } from "./logging.service.ts";
+import { assertSpyCall, assertSpyCalls, stub } from "../../deps/std.ts";
+import { ISerializable } from "../util/serializable.ts";
+import { ConsoleLogger } from "./console.logger.ts";
+import { LogLevel } from "./logLevel.ts";
 
-function logAsserter(logger: ConsoleLoggingService) {
+function logAsserter(logger: ConsoleLogger) {
   return (
     level: LogLevel,
     name: string,
@@ -24,7 +24,7 @@ function logAsserter(logger: ConsoleLoggingService) {
     }
   };
 }
-function logErrorAsserter(logger: ConsoleLoggingService) {
+function logErrorAsserter(logger: ConsoleLogger) {
   return (
     name: string,
     message: string,
@@ -50,7 +50,7 @@ function logErrorAsserter(logger: ConsoleLoggingService) {
 Deno.test({
   name: "logger_service",
   fn: async (t) => {
-    const logger = new ConsoleLoggingService();
+    const logger = new ConsoleLogger();
     const assertLog = logAsserter(logger);
     const assertError = logErrorAsserter(logger);
 

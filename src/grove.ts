@@ -1,104 +1,62 @@
-import { Application, Request } from "../deps/oak.ts";
-import { ConsoleLoggingService } from "./services/mod.ts";
-import { IContext, IServices, IState } from "./context.ts";
+import { Command } from "../deps/cliffy.ts";
+import { IContext } from "./context.ts";
+import { IMode } from "./modes/mod.ts";
 
 type InitApplicationContext<
-  TServices extends IServices,
-  TContext extends IContext<TServices>,
+  TContext extends IContext,
 > = () => Promise<TContext>;
 
-type InitControllers<
-  TServices extends IServices,
-  TContext extends IContext<TServices>,
-  TState extends IState<TServices, TContext>,
-> = (
-  context: TContext,
-  app: Application<TState>,
-) => Promise<void>;
-
-export interface IGroveConfig<
-  TServices extends IServices,
-  TContext extends IContext<TServices>,
-  TState extends IState<TServices, TContext>,
-> {
-  port?: number;
-  hostname?: string;
-  initContext?: InitApplicationContext<TServices, TContext>;
-  initControllers?: InitControllers<TServices, TContext, TState>;
+export interface IGroveConfig<TContext extends IContext> {
+  initContext: InitApplicationContext<TContext>;
+  modes: IMode<TContext>[];
 }
 
-export class Grove<
-  TServices extends IServices,
-  TContext extends IContext<TServices>,
-  TState extends IState<TServices, TContext>,
-> {
+export class Grove<TContext extends IContext> {
   constructor(
-    private readonly config: IGroveConfig<TServices, TContext, TState>,
+    private readonly config: IGroveConfig<TContext>,
   ) {
   }
 
-  private async defaultContext(): Promise<TContext> {
-    return await {
-      services: {
-        logging: new ConsoleLoggingService(),
-      },
-    } as TContext;
-  }
+  public async start(args: string[]) {
+    const context = await this.config.initContext();
+    const command = new Command()
+      .throwErrors()
+      .name("grove")
+      .action(function () {
+        this.showHelp();
+        Deno.exit(1);
+      });
 
-  private async defaultControllers(
-    _context: TContext,
-    _app: Application<TState>,
-  ): Promise<void> {
-  }
-
-  public async start() {
-    const app = new Application<TState>();
-
-    // Initialize context
-    const context = this.config.initContext
-      ? await this.config.initContext()
-      : await this.defaultContext();
-
-    // Initialize controllers
-    if (this.config.initControllers) {
-      await this.config.initControllers(context, app);
-    } else {
-      await this.defaultControllers(context, app);
+    for (const mode of this.config.modes) {
+      command
+        .command(mode.name)
+        .action(() => this.run(context, mode));
     }
 
-    const { services: { logging } } = context;
-    const { port = 8080, hostname = "0.0.0.0" } = this.config;
+    await command
+      .error((err) =>
+        context.log.error(
+          "grove_parse_error",
+          "Command line args were unable to be parsed",
+          err,
+        )
+      )
+      .help({})
+      .meta("deno", Deno.version.deno)
+      .meta("v8", Deno.version.v8)
+      .meta("typescript", Deno.version.typescript)
+      .parse(args);
+  }
 
-    logging.info("server", `Server starting...`, { port });
-    app.addEventListener("listen", (_event) => {
-      logging.info("server", `Listening on http://localhost:${port}`, {
-        port,
+  private async run(context: TContext, mode: IMode<TContext>) {
+    const { name } = mode;
+    context.log.info("grove_run", `grove running mode ${name}`, { name });
+    try {
+      await mode.run(context);
+    } catch (err) {
+      context.log.error("grove_runtime_error", err.message, err, {
+        mode: mode.name,
       });
-    });
-    app.addEventListener("error", (err) => {
-      const { error, timeStamp, message, filename, lineno, context } = err;
-      const { accepts, hasBody, headers, ips, method, url } =
-        context?.request ||
-        {} as Request;
-      logging.error(
-        "server",
-        `unexpected server error: ${err.message}`,
-        {
-          timeStamp,
-          message,
-          filename,
-          lineno,
-          accepts,
-          hasBody,
-          headers,
-          ips,
-          method,
-          url,
-          ...error,
-        },
-        error,
-      );
-    });
-    await app.listen({ hostname, port });
+    }
   }
 }

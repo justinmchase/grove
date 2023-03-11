@@ -5,11 +5,12 @@ import { Managers } from "./managers/mod.ts";
 
 export type { Services } from "./services/mod.ts";
 
-export interface Context extends IContext<Services> {
+export interface Context extends IContext {
+  services: Services;
   repositories: Repositories;
   managers: Managers;
 }
 
-export interface State extends IState<Services, Context> {
+export interface State extends IState<Context> {
   dummy?: string;
 }

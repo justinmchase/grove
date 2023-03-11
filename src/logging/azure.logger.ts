@@ -1,13 +1,14 @@
-import { snakeCase } from "../../../deps/case.ts";
-import { base64Encode } from "../../../deps/std.ts";
-import { Status } from "../../../deps/oak.ts";
-import { LoggingService, LogLevel } from "./logging.service.ts";
-import { UnexpectedStatusError } from "../../errors/mod.ts";
-import { toSerializable } from "../../util/serializable.ts";
-import { readRequiredString, readString } from "../../util/config.ts";
-import { hmacCreateKey, hmacSign } from "../../util/hmac.ts";
+import { snakeCase } from "../../deps/case.ts";
+import { base64Encode } from "../../deps/std.ts";
+import { Status } from "../../deps/oak.ts";
+import { LogLevel } from "./logLevel.ts";
+import { Logger } from "./logger.ts";
+import { UnexpectedStatusError } from "../errors/mod.ts";
+import { toSerializable } from "../util/serializable.ts";
+import { readRequiredString, readString } from "../util/config.ts";
+import { hmacCreateKey, hmacSign } from "../util/hmac.ts";
 
-export class AzureLoggingService extends LoggingService {
+export class AzureLogger extends Logger {
   constructor(
     private readonly workspaceId: string,
     private readonly cryptoKey: CryptoKey,
@@ -21,7 +22,7 @@ export class AzureLoggingService extends LoggingService {
     const secret = readRequiredString(env, "AZURE_ANALYTICS_WORKSPACE_SECRET");
     const logType = readString(env, "AZURE_ANALYTICS_LOGTYPE", "Grove");
     const key = await hmacCreateKey(secret);
-    return new AzureLoggingService(workspaceId, key, logType);
+    return new AzureLogger(workspaceId, key, logType);
   }
 
   public async log(

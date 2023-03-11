@@ -1,16 +1,11 @@
 import { Application, Context } from "../../deps/oak.ts";
-import { IContext, IServices, IState } from "../context.ts";
+import { IContext, IState } from "../context.ts";
 import { Controller } from "./controller.ts";
-import { ILoggingService } from "../services/logging/mod.ts";
 
 export class LogController<
-  TServices extends IServices,
-  TContext extends IContext<TServices>,
-  TState extends IState<TServices, TContext>,
-> implements Controller<TServices, TContext, TState> {
-  constructor(private readonly logging: ILoggingService) {
-  }
-
+  TContext extends IContext,
+  TState extends IState<TContext>,
+> implements Controller<TContext, TState> {
   public async use(app: Application<TState>): Promise<void> {
     app.use(this.handler.bind(this));
     await undefined;
@@ -26,7 +21,7 @@ export class LogController<
       const t = end - start;
       const ms = `${t}ms`;
       const { response: { status } } = ctx;
-      this.logging.info(
+      ctx.state.context.log.info(
         "request",
         `${status} ${method} ${url} ${ms}`,
         {

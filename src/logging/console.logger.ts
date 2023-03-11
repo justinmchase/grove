@@ -1,4 +1,4 @@
-import { snakeCase } from "../../../deps/case.ts";
+import { snakeCase } from "../../deps/case.ts";
 import {
   bgBlue,
   bgRed,
@@ -7,11 +7,12 @@ import {
   brightWhite,
   red,
   yellow,
-} from "../../../deps/std.ts";
-import { toSerializable } from "../../util/serializable.ts";
-import { LoggingService, LogLevel } from "./logging.service.ts";
+} from "../../deps/std.ts";
+import { toSerializable } from "../util/serializable.ts";
+import { LogLevel } from "./logLevel.ts";
+import { Logger } from "./logger.ts";
 
-export class ConsoleLoggingService extends LoggingService {
+export class ConsoleLogger extends Logger {
   private readonly isTTY: boolean;
   constructor() {
     super();

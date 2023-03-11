@@ -1,12 +1,10 @@
-import {
-  ILoggingService,
-  LoggingService,
-  LogLevel,
-} from "./logging.service.ts";
+import { LogLevel } from "./logLevel.ts";
+import { ILogger } from "./logger.interface.ts";
+import { Logger } from "./logger.ts";
 
-export class AggregateLoggingService extends LoggingService {
-  private readonly loggers: ILoggingService[];
-  constructor(...loggers: ILoggingService[]) {
+export class AggregateLogger extends Logger {
+  private readonly loggers: ILogger[];
+  constructor(...loggers: ILogger[]) {
     super();
     this.loggers = [...loggers];
   }
