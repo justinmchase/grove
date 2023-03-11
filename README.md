@@ -2,7 +2,9 @@
 
 [![check](https://github.com/justinmchase/grove/actions/workflows/check.yml/badge.svg)](https://github.com/justinmchase/grove/actions/workflows/check.yml)
 
-Grove is a [Hybrid Microservice]() framework for [Deno](https://deno.land).
+Grove is a
+[Hybrid Microservice](https://justinmchase.com/2023/03/11/hybrid-microservice-architecture/)
+framework for [Deno](https://deno.land).
 
 ## Usage
 
