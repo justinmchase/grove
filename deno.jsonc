@@ -3,6 +3,8 @@
     "test": "deno test src",
     "example": "deno run -A example/main.ts",
     "example:web": "deno run -A example/main.ts web",
+    "example:job": "deno run -A example/main.ts job",
+    "example:job:hello": "deno run -A example/main.ts job hello",
     "watch:test": "deno test src --watch",
     "watch:example:web": "deno run --watch -A example/main.ts"
   }

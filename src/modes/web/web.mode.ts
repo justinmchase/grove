@@ -1,6 +1,12 @@
 import { IContext, IState } from "../../context.ts";
 import { Application, Request } from "../../../deps/oak.ts";
-import { IMode } from "../mode.interface.ts";
+import { IMode, IModeOption } from "../mode.interface.ts";
+import { Type } from "../../util/type.ts";
+
+type WebArgs = {
+  port?: number;
+  hostname?: string;
+};
 
 export interface IWebModeConfig<
   TContext extends IContext,
@@ -22,14 +28,36 @@ type InitControllers<
 export class WebMode<TContext extends IContext, TState extends IState<TContext>>
   implements IMode<TContext> {
   public name = "web";
+  public description = "Runs a webserver until closed";
 
   constructor(
     private readonly config: IWebModeConfig<TContext, TState>,
   ) {
   }
 
-  public async run(context: TContext) {
-    const { port = 8080, hostname = "0.0.0.0" } = this.config;
+  public getOptions(): IModeOption[] {
+    return [
+      {
+        type: Type.Number,
+        name: "port",
+        description: "The port to listen on",
+        defaultValue: this.config.port ?? 8080,
+      },
+      {
+        type: Type.String,
+        name: "hostname",
+        description: "The hostname interface to listen on",
+        defaultValue: this.config.hostname ?? "0.0.0.0",
+      },
+    ];
+  }
+
+  public getModes(): IMode<TContext>[] {
+    return [];
+  }
+
+  public async run(args: WebArgs, context: TContext) {
+    const { port, hostname } = args;
     context.log.info("grove_web_start", `Server starting...`, { port });
     const app = new Application<TState>();
     await this.config.initControllers(context, app);
@@ -37,7 +65,7 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
     app.addEventListener("listen", (_event) => {
       context.log.info(
         "grove_web_listening",
-        `Listening on http://localhost:${port}`,
+        `Listening on http://${hostname}:${port}`,
         {
           port,
         },

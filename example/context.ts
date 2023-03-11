@@ -11,6 +11,13 @@ export interface Context extends IContext {
   managers: Managers;
 }
 
+export interface JobContext extends IContext {
+  name: string;
+  services: Services;
+  repositories: Repositories;
+  managers: Managers;
+}
+
 export interface State extends IState<Context> {
   dummy?: string;
 }
