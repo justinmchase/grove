@@ -27,3 +27,5 @@ const grove = new Grove({
 });
 
 await grove.start(Deno.args);
+
+// deno run -A example/main.ts web

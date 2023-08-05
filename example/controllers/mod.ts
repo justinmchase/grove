@@ -13,19 +13,16 @@ export async function initControllers(
   app: Application<State>,
 ) {
   const {
-    services: {
-      logging,
-    },
     managers: {
       hellos,
     },
   } = context;
 
-  const error = new ErrorController(logging);
+  const error = new ErrorController();
   const health = new HealthController();
   const isHtml = new IsHtmlController();
-  const log = new LogController(logging);
-  const hello = new HelloController(logging, hellos);
+  const log = new LogController();
+  const hello = new HelloController(hellos);
 
   await error.use(app);
   await health.use(app);

@@ -1,40 +1,38 @@
 import {
   Application,
   Controller,
-  ILoggingService,
   Request,
   Response,
   Router,
   Status,
+  ILogger,
 } from "../../../src/mod.ts";
-import { Context, Services, State } from "../../context.ts";
+import { Context, State } from "../../context.ts";
 import { HelloManager } from "../../managers/hello.manager.ts";
 
-export class HelloController extends Controller<Services, Context, State> {
+export class HelloController implements Controller<Context, State> {
   constructor(
-    private readonly logging: ILoggingService,
     private readonly hellos: HelloManager,
   ) {
-    super();
   }
-
+      
   public async use(app: Application<State>): Promise<void> {
     const router = new Router<State>();
     router.post(
       "/hello",
       async (context, _next) =>
-        await this.handler(context.request, context.response),
+        await this.handler(context.state.context.log, context.request, context.response),
     );
     app.use(router.allowedMethods());
     app.use(router.routes());
     await undefined;
   }
 
-  private async handler(req: Request, res: Response) {
+  private async handler(log: ILogger, req: Request, res: Response) {
     const data = req.hasBody ? await req.body({ type: "json" }).value : {};
     const { name = "World", punctuation = "!" } = data;
     const hello = await this.hellos.create({ name, punctuation });
-    await this.logging.info(
+    await log.info(
       "hello",
       hello.greeting,
       hello,
