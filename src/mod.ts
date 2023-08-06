@@ -1,4 +1,5 @@
 export { Application, Request, Response, Router, Status } from "../deps/oak.ts";
+export * as github_api from "../deps/github.ts";
 
 export * from "./context.ts";
 export * from "./grove.ts";
