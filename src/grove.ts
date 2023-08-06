@@ -20,6 +20,11 @@ export class Grove<TContext extends IContext> {
   }
 
   private build(context: TContext, command: Command, modes: IMode<TContext>[]) {
+    context.log.critical(
+      "grove_modes_empty",
+      "At least one mode must be configured",
+    );
+
     for (const mode of modes) {
       const options = mode.getOptions();
       const subModes = mode.getModes();
@@ -69,6 +74,9 @@ export class Grove<TContext extends IContext> {
       }
       command.action((args: unknown) => this.run(args, context, mode));
     }
+
+    // The first command is the default command
+    command.default(modes[0]?.name);
     return command;
   }
 
