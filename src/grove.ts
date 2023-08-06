@@ -20,11 +20,6 @@ export class Grove<TContext extends IContext> {
   }
 
   private build(context: TContext, command: Command, modes: IMode<TContext>[]) {
-    context.log.critical(
-      "grove_modes_empty",
-      "At least one mode must be configured",
-    );
-
     for (const mode of modes) {
       const options = mode.getOptions();
       const subModes = mode.getModes();
@@ -75,8 +70,6 @@ export class Grove<TContext extends IContext> {
       command.action((args: unknown) => this.run(args, context, mode));
     }
 
-    // The first command is the default command
-    command.default(modes[0]?.name);
     return command;
   }
 
@@ -87,10 +80,38 @@ export class Grove<TContext extends IContext> {
       .name("grove")
       .action(function () {
         this.showHelp();
-        Deno.exit(1);
+        try {
+          Deno.exit(1);
+        } catch (err) {
+          // In Deno Deploy the exit function is not allowed
+          // Just ignore the error in this case
+          // any other error throw
+          if (err.name !== "PermissionDenied") {
+            throw err;
+          }
+        }
       });
 
-    this.build(context, command, this.config.modes);
+    if (!this.config.modes.length) {
+      context.log.critical(
+        "grove_modes_empty",
+        "At least one mode must be configured",
+      );
+    } else {
+      this.build(context, command, this.config.modes);
+    }
+    if (!args.length && this.config.modes.length) {
+      // In deno deploy you can't specify args so you must setup a default mode
+      // Cliffy supports default commands but it doesn't seem to work so for now we will hack it for now
+      // todo: use after https://github.com/c4spar/deno-cliffy/issues/655 is resolved
+      const defaultMode = this.config.modes[0].name;
+      context.log.info(
+        "grove_default_mode",
+        `no mode specified, using default mode ${defaultMode}`,
+        { mode: defaultMode, args },
+      );
+      args = [defaultMode];
+    }
     await command
       .error((err) =>
         context.log.error(
@@ -103,6 +124,8 @@ export class Grove<TContext extends IContext> {
       .meta("deno", Deno.version.deno)
       .meta("v8", Deno.version.v8)
       .meta("typescript", Deno.version.typescript)
+      // todo: use after https://github.com/c4spar/deno-cliffy/issues/655 is resolved
+      // .default(this.config.modes[0].name)
       .parse(args);
   }
 
