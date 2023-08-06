@@ -28,7 +28,7 @@ export abstract class GithubWebhookController<
   private readonly githubWebhookPath: string;
   constructor(
     config: IGitHubWebhookConfig,
-    private readonly github: GitHubService,
+    protected readonly github: GitHubService,
   ) {
     this.githubWebhookPath = config.githubWebhookPath;
   }
