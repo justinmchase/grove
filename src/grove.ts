@@ -1,7 +1,6 @@
 import { Command, EnumType } from "../deps/cliffy.ts";
 import { IContext } from "./context.ts";
 import { NotImplementedError } from "./errors/notimplemented.error.ts";
-import { EmptyError } from "./errors/empty.error.ts";
 import { IMode } from "./modes/mod.ts";
 import { Type } from "./util/type.ts";
 
@@ -21,7 +20,10 @@ export class Grove<TContext extends IContext> {
   }
 
   private build(context: TContext, command: Command, modes: IMode<TContext>[]) {
-    EmptyError.ThrowIfEmpty(modes, "At least one mode must be configured");
+    context.log.critical(
+      "grove_modes_empty",
+      "At least one mode must be configured",
+    );
 
     for (const mode of modes) {
       const options = mode.getOptions();
@@ -74,7 +76,7 @@ export class Grove<TContext extends IContext> {
     }
 
     // The first command is the default command
-    command.default(modes[0].name);
+    command.default(modes[0]?.name);
     return command;
   }
 
