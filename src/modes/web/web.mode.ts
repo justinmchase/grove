@@ -60,8 +60,11 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
     const { port, hostname } = args;
     context.log.info("grove_web_start", `Server starting...`, { port });
     const app = new Application<TState>();
+    app.use(async (ctx, next) => {
+      ctx.state.context = context;
+      await next();
+    });
     await this.config.initControllers(context, app);
-
     app.addEventListener("listen", (_event) => {
       context.log.info(
         "grove_web_listening",

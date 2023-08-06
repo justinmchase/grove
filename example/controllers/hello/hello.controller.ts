@@ -1,11 +1,11 @@
 import {
   Application,
   Controller,
+  ILogger,
   Request,
   Response,
   Router,
   Status,
-  ILogger,
 } from "../../../src/mod.ts";
 import { Context, State } from "../../context.ts";
 import { HelloManager } from "../../managers/hello.manager.ts";
@@ -15,13 +15,17 @@ export class HelloController implements Controller<Context, State> {
     private readonly hellos: HelloManager,
   ) {
   }
-      
+
   public async use(app: Application<State>): Promise<void> {
     const router = new Router<State>();
     router.post(
       "/hello",
       async (context, _next) =>
-        await this.handler(context.state.context.log, context.request, context.response),
+        await this.handler(
+          context.state.context.log,
+          context.request,
+          context.response,
+        ),
     );
     app.use(router.allowedMethods());
     app.use(router.routes());
