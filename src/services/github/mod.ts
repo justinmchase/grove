@@ -10,7 +10,7 @@ export interface IGitHubConfig {
   githubWebhookSecret?: string;
 }
 
-export class GithubService {
+export class GitHubService {
   constructor(
     private readonly appId: number,
     private readonly privateKey: string,
@@ -18,7 +18,7 @@ export class GithubService {
   ) {
   }
 
-  public static async createGithubService(log: ILogger, config: IGitHubConfig) {
+  public static async create(log: ILogger, config: IGitHubConfig) {
     const { githubAppId, githubPrivateKey, githubWebhookSecret } = config;
     const secret = githubWebhookSecret
       ? await hmacCreateKey(base64Encode(githubWebhookSecret))
@@ -33,7 +33,7 @@ export class GithubService {
         githubWebhookSecret: !!githubWebhookSecret,
       },
     );
-    return new GithubService(
+    return new GitHubService(
       githubAppId,
       githubPrivateKey,
       secret,
