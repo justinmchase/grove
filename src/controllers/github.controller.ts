@@ -10,7 +10,7 @@ import {
   GitHubInstallationEvent,
   GitHubPingEvent,
 } from "../../deps/github.ts";
-import { GithubService } from "../services/github/mod.ts";
+import { GitHubService } from "../services/github/mod.ts";
 import { IContext, IState } from "../context.ts";
 import { Controller } from "./controller.ts";
 import { ILogger } from "../logging/mod.ts";
@@ -26,7 +26,7 @@ export abstract class GithubWebhookController<
   private readonly githubWebhookPath: string;
   constructor(
     config: IGitHubWebhookConfig,
-    private readonly github: GithubService,
+    private readonly github: GitHubService,
   ) {
     this.githubWebhookPath = config.githubWebhookPath;
   }
