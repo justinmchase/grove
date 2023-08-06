@@ -67,14 +67,7 @@ export class Grove<TContext extends IContext> {
           default: defaultValue,
         });
       }
-      command.action((args: unknown) => {
-        context.log.debug(
-          "grove",
-          "grove command",
-          args as Record<string, unknown>,
-        );
-        this.run(args, context, mode);
-      });
+      command.action((args: unknown) => this.run(args, context, mode));
     }
     return command;
   }
@@ -107,12 +100,16 @@ export class Grove<TContext extends IContext> {
 
   private async run(args: unknown, context: TContext, mode: IMode<TContext>) {
     const { name } = mode;
-    context.log.info("grove_run", `grove running mode ${name}`, { name });
+    context.log.info("grove_run", `grove running mode ${name}`, {
+      mode: name,
+      args,
+    });
     try {
       await mode.run(args, context);
     } catch (err) {
       context.log.error("grove_runtime_error", err.message, err, {
         mode: mode.name,
+        args,
       });
     }
   }
