@@ -122,7 +122,12 @@ export abstract class GithubWebhookController<
     log.debug(
       "github_event_installation",
       `${app_slug} installation ${id} ${action} for ${login}`,
-      { event },
+      { 
+        action,
+        installationId: id,
+        app_slug,
+        login
+      },
     );
     res.status = Status.OK;
     res.body = {
