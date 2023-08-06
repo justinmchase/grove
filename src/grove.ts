@@ -68,7 +68,11 @@ export class Grove<TContext extends IContext> {
         });
       }
       command.action((args: unknown) => {
-        console.log(args);
+        context.log.debug(
+          "grove",
+          "grove command",
+          args as Record<string, unknown>,
+        );
         this.run(args, context, mode);
       });
     }
