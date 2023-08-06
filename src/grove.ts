@@ -87,7 +87,16 @@ export class Grove<TContext extends IContext> {
       .name("grove")
       .action(function () {
         this.showHelp();
-        Deno.exit(1);
+        try {
+          Deno.exit(1);
+        } catch (err) {
+          // In Deno Deploy the exit function is not allowed
+          // Just ignore the error in this case
+          // any other error throw
+          if (err.name !== "PermissionDenied") {
+            throw err;
+          }
+        }
       });
 
     this.build(context, command, this.config.modes);
