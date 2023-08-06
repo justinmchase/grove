@@ -3,7 +3,11 @@ import { Request } from "../../../deps/oak.ts";
 import { SignatureError } from "../../errors/signature.error.ts";
 import { ILogger } from "../../logging/mod.ts";
 import { hmacCreateKey, hmacVerify } from "../../util/hmac.ts";
-import { GitHubClient, appJwt, createInstallationToken } from "../../../deps/github.ts";
+import {
+  appJwt,
+  createInstallationToken,
+  GitHubClient,
+} from "../../../deps/github.ts";
 
 export interface IGitHubConfig {
   githubAppId: number;
@@ -60,7 +64,6 @@ export class GitHubService {
     }
   }
 
-  
   private async token(installationId: number) {
     if (!this.appId) {
       throw new Error(`invalid appId ${this.appId}`);
@@ -84,11 +87,10 @@ export class GitHubService {
     return token;
   }
 
-
   public async client(installationId: number) {
-    const accessToken = await this.token(installationId)
+    const accessToken = await this.token(installationId);
     return new GitHubClient({
       accessToken,
-    })
+    });
   }
 }

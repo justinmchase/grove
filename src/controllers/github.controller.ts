@@ -6,7 +6,7 @@ import {
   Status,
 } from "../../deps/oak.ts";
 import {
-GitHubDeploymentProtectionRuleEvent,
+  GitHubDeploymentProtectionRuleEvent,
   GitHubEvent,
   GitHubEventName,
   GitHubInstallationEvent,
@@ -50,7 +50,10 @@ export abstract class GithubWebhookController<
   }
 
   private async handler(log: ILogger, req: Request, res: Response) {
-    const githubEvent = req.headers.get("X-GitHub-Event") as GitHubEventName | "ping" | "installation";
+    const githubEvent = req.headers.get("X-GitHub-Event") as
+      | GitHubEventName
+      | "ping"
+      | "installation";
     await this.github.verify(req);
     const body = await req.body({ type: "json" }).value;
 
@@ -81,7 +84,7 @@ export abstract class GithubWebhookController<
         return await this.handleDeploymentProtectionRuleEvent(
           log,
           res,
-          event as GitHubDeploymentProtectionRuleEvent
+          event as GitHubDeploymentProtectionRuleEvent,
         );
       default:
         return await this.unsupportedEvent(log, githubEvent, res, body);
@@ -130,11 +133,11 @@ export abstract class GithubWebhookController<
     log.debug(
       "github_event_installation",
       `${app_slug} installation ${id} ${action} for ${login}`,
-      { 
+      {
         action,
         installationId: id,
         app_slug,
-        login
+        login,
       },
     );
     res.status = Status.OK;
@@ -143,7 +146,7 @@ export abstract class GithubWebhookController<
     };
     await undefined;
   }
-  
+
   protected async handleDeploymentProtectionRuleEvent(
     log: ILogger,
     res: Response,
@@ -161,7 +164,7 @@ export abstract class GithubWebhookController<
     log.debug(
       "github_event_deployment_protection_rule",
       `deployment protection rule ${action} for ${deploymentId}:${full_name}/${environment} by ${senderId}:${login}`,
-      { 
+      {
         action,
         workflowEvent,
         installationId,
