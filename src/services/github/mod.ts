@@ -3,6 +3,7 @@ import { Request } from "../../../deps/oak.ts";
 import { SignatureError } from "../../errors/signature.error.ts";
 import { ILogger } from "../../logging/mod.ts";
 import { hmacCreateKey, hmacVerify } from "../../util/hmac.ts";
+import { GitHubClient, appJwt, createInstallationToken } from "../../../deps/github.ts";
 
 export interface IGitHubConfig {
   githubAppId: number;
@@ -57,5 +58,37 @@ export class GitHubService {
         throw new SignatureError("signature does not match body");
       }
     }
+  }
+
+  
+  private async token(installationId: number) {
+    if (!this.appId) {
+      throw new Error(`invalid appId ${this.appId}`);
+    }
+
+    if (!this.privateKey) {
+      throw new Error(`invalid privateKey`);
+    }
+
+    // todo: cache the token for a minute at least to reduce calls to this api
+    const jwt = await appJwt(`${this.appId}`, this.privateKey);
+    const { token } = await createInstallationToken(
+      jwt,
+      `${installationId}`,
+    );
+    if (!token) {
+      throw new Error(
+        `inavlid token ${installationId} ${this.appId} ${this.privateKey}`,
+      );
+    }
+    return token;
+  }
+
+
+  public async client(installationId: number) {
+    const accessToken = await this.token(installationId)
+    return new GitHubClient({
+      accessToken,
+    })
   }
 }
