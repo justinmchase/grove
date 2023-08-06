@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "test": "deno test src",
+    "check": "deno fmt && deno lint && deno test",
     "example": "deno run -A example/main.ts",
     "example:web": "deno run -A example/main.ts web",
     "example:job": "deno run -A example/main.ts job",

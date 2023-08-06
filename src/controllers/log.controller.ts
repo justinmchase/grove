@@ -23,11 +23,11 @@ export class LogController<
       const { response: { status } } = ctx;
       ctx.state.context.log.info(
         "request",
-        `${status} ${method} ${url} ${ms}`,
+        `${status} ${method} ${url.pathname} ${ms}`,
         {
           status,
           method,
-          url,
+          url: `${url}`,
           ms,
           ip,
         },
