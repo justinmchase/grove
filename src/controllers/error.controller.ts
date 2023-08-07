@@ -12,9 +12,13 @@ export class ErrorController<
   }
 
   private async handler(ctx: Context<TState>, next: () => Promise<unknown>) {
+    const start = new Date().valueOf();
     try {
       await next();
     } catch (err) {
+      const end = new Date().valueOf();
+      const t = end - start;
+      const ms = `${t}ms`;
       const { message } = err;
       const status = err.status ?? Status.InternalServerError;
       const { request: { ip, method, url } } = ctx;
@@ -26,9 +30,10 @@ export class ErrorController<
         `An unhandled error occurred: ${message}`,
         err,
         {
-          method,
-          url,
           status,
+          method,
+          url: `${url}`,
+          ms,
           ip,
         },
       );
