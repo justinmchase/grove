@@ -1,5 +1,6 @@
 import {
   Database,
+  Document,
   MongoClient,
   parseConnectionString,
 } from "../../../deps/mongo.ts";
@@ -16,8 +17,8 @@ export class MongoService {
   ) {
   }
 
-  public collection(name: string) {
-    return this.db.collection(name);
+  public collection<T extends Document = Document>(name: string) {
+    return this.db.collection<T>(name);
   }
 
   public close() {
