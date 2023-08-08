@@ -5,6 +5,10 @@ import {
 } from "../../../deps/mongo.ts";
 import { ILogger } from "../../mod.ts";
 
+export interface IMongoConfig {
+  mongoConnectionString: string;
+}
+
 export class MongoService {
   constructor(
     private readonly client: MongoClient,
@@ -22,8 +26,9 @@ export class MongoService {
 
   public static async create(
     logging: ILogger,
-    mongoConnectionString: string,
+    config: IMongoConfig,
   ) {
+    const { mongoConnectionString } = config;
     if (!mongoConnectionString) {
       logging.warn(
         "mongo",
@@ -40,6 +45,11 @@ export class MongoService {
     logging.info(
       `mongo`,
       "mongo connected",
+      {
+        db: options.db,
+        servers: options.servers,
+        appname: options.appname,
+      },
     );
     return new MongoService(client, db);
   }
