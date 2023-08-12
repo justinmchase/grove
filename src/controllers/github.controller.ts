@@ -56,7 +56,6 @@ export abstract class GithubWebhookController<
       | "installation";
     await this.github.verify(req);
     const body = await req.body({ type: "json" }).value;
-
     const event = body as GitHubEvent | GitHubDeploymentProtectionRuleEvent;
     const { action, sender, repository } = event;
     log.info(
