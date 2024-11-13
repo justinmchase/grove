@@ -1,4 +1,4 @@
-# Grove
+# Grove 🌳
 
 [![check](https://github.com/justinmchase/grove/actions/workflows/check.yml/badge.svg)](https://github.com/justinmchase/grove/actions/workflows/check.yml)
 
