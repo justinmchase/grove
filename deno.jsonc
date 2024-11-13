@@ -1,6 +1,6 @@
 {
   "name": "@justinmchase/grove",
-  "version": "0.1.0",
+  "version": "0.5.1",
   "exports": "./mod.ts",
   "tasks": {
     "check": "deno fmt && deno lint && deno test && npx jsr publish --dry-run --allow-dirty",
