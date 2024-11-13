@@ -6,7 +6,7 @@
     "jsr:@cliffy/internal@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/table@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@db/mongo@0.33": "0.33.0",
-    "jsr:@justinmchase/github-api@0.5.13": "0.5.13",
+    "jsr:@justinmchase/github-api@0.5.14": "0.5.14",
     "jsr:@justinmchase/serializable@~0.3.13": "0.3.13",
     "jsr:@justinmchase/type@~0.2.4": "0.2.4",
     "jsr:@lucsoft/web-bson@~0.3.1": "0.3.1",
@@ -80,8 +80,8 @@
         "jsr:@std/encoding@~0.220.1"
       ]
     },
-    "@justinmchase/github-api@0.5.13": {
-      "integrity": "fddca19a0f1cbe2e64fb7df83550c2a6e5d79e46a4fc94230b0d29222d2f702b",
+    "@justinmchase/github-api@0.5.14": {
+      "integrity": "63369bb261878673148f2261fe6e28b9d7db7014a80dcacaf385b5cd37a55a9e",
       "dependencies": [
         "jsr:@std/async",
         "jsr:@std/encoding@^1.0.5",
@@ -1029,7 +1029,7 @@
     "dependencies": [
       "jsr:@cliffy/command@^1.0.0-rc.7",
       "jsr:@db/mongo@0.33",
-      "jsr:@justinmchase/github-api@0.5.13",
+      "jsr:@justinmchase/github-api@0.5.14",
       "jsr:@justinmchase/serializable@~0.3.13",
       "jsr:@justinmchase/type@~0.2.4",
       "jsr:@oak/oak@^17.1.3",

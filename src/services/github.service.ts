@@ -46,6 +46,10 @@ export class GitHubService {
     );
   }
 
+  public async check() {
+    return await this.credentialProvider.check();
+  }
+
   public async verify(req: Request) {
     if (this.webhookKey) {
       const signature = req.headers.get("X-Hub-Signature-256");
