@@ -1,5 +1,5 @@
-import { State } from "../deps/oak.ts";
-import { ILogger } from "./logging/mod.ts";
+import type { State } from "@oak/oak";
+import type { ILogger } from "./logging/mod.ts";
 
 export interface IContext {
   log: ILogger;

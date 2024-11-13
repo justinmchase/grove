@@ -1,13 +1,11 @@
-import {
-  Application,
-  ErrorController,
-  HealthController,
-  IsHtmlController,
-  LogController,
-  NotFoundController,
-} from "../../src/mod.ts";
 import { HelloController } from "./hello/mod.ts";
-import { Context, State } from "../context.ts";
+import type { Context, State } from "../context.ts";
+import type { Application } from "@oak/oak/application";
+import { ErrorController } from "../../src/controllers/error.controller.ts";
+import { HealthController } from "../../src/controllers/health.controller.ts";
+import { IsHtmlController } from "../../src/controllers/parse.controller.ts";
+import { LogController } from "../../src/controllers/log.controller.ts";
+import { NotFoundController } from "../../src/controllers/not_found.controller.ts";
 
 export async function initControllers(
   context: Context,

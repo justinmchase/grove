@@ -1,5 +1,5 @@
-import { IContext } from "../context.ts";
-import { Type } from "../util/type.ts";
+import type { Type } from "@justinmchase/type";
+import type { IContext } from "../context.ts";
 
 export interface IModeOption {
   type: Type.String | Type.Number | Type.Boolean;

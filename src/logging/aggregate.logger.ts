@@ -1,6 +1,6 @@
-import { LogLevel } from "./logLevel.ts";
-import { ILogger } from "./logger.interface.ts";
 import { Logger } from "./logger.ts";
+import type { LogLevel } from "./logLevel.ts";
+import type { ILogger } from "./logger.interface.ts";
 
 export class AggregateLogger extends Logger {
   private readonly loggers: ILogger[];

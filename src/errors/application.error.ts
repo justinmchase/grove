@@ -1,5 +1,5 @@
-import { Status } from "../../deps/oak.ts";
-import { ErrorCode } from "./errorCode.ts";
+import type { ErrorCode } from "./errorCode.ts";
+import type { Status } from "@oak/oak";
 
 export class ApplicationError extends Error {
   constructor(

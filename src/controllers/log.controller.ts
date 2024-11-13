@@ -1,6 +1,6 @@
-import { Application, Context } from "../../deps/oak.ts";
-import { IContext, IState } from "../context.ts";
-import { Controller } from "./controller.ts";
+import type { Application, Context } from "@oak/oak";
+import type { IContext, IState } from "../context.ts";
+import type { Controller } from "./controller.ts";
 
 export class LogController<
   TContext extends IContext,

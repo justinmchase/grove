@@ -1,8 +1,8 @@
-import { IContext } from "../../context.ts";
 import { ExpectedError } from "../../errors/expected.error.ts";
-import { IMode, IModeOption } from "../mode.interface.ts";
-import { IJob } from "./job.interface.ts";
-import { IJobContext } from "./job.context.ts";
+import type { IContext } from "../../context.ts";
+import type { IMode, IModeOption } from "../mode.interface.ts";
+import type { IJob } from "./job.interface.ts";
+import type { IJobContext } from "./job.context.ts";
 
 export interface IJobModeConfig<TContext extends IContext> {
   initJobs: () => IJob<TContext>[];
@@ -46,7 +46,14 @@ export class JobMode<TContext extends IJobContext> implements IMode<TContext> {
     try {
       await job.run(args, context);
     } catch (err) {
-      context.log.error("grove_job_error", err.message, err, { name });
+      if (err instanceof Error) {
+        context.log.error("grove_job_error", err.message, err, { name });
+      } else {
+        context.log.error("grove_job_error", "Unknown error", new Error(), {
+          name,
+          err,
+        });
+      }
     }
   }
 }

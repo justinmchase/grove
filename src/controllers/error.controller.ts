@@ -1,6 +1,7 @@
-import { Application, Context, Status } from "../../deps/oak.ts";
-import { IContext, IState } from "../context.ts";
+import { Status } from "@oak/oak";
 import { Controller } from "./controller.ts";
+import type { Application, Context } from "@oak/oak";
+import type { IContext, IState } from "../context.ts";
 
 export class ErrorController<
   TContext extends IContext,
@@ -12,13 +13,25 @@ export class ErrorController<
   }
 
   private async handler(ctx: Context<TState>, next: () => Promise<unknown>) {
+    const start = new Date().valueOf();
     try {
       await next();
-    } catch (err) {
-      const { message } = err;
-      const status = err.status ?? Status.InternalServerError;
+    } catch (e) {
+      const end = new Date().valueOf();
+      const t = end - start;
+      const ms = `${t}ms`;
+      const err = e instanceof Error
+        ? e
+        : new Error("An unknown error occurred");
+      const { message } = err instanceof Error
+        ? err
+        : { message: "An unknown error occurred" };
+      const { status = Status.InternalServerError } = err as unknown as Record<
+        string,
+        unknown
+      >;
       const { request: { ip, method, url } } = ctx;
-      ctx.response.status = status;
+      ctx.response.status = status as Status;
       ctx.response.body = { ok: false, message };
       ctx.response.headers.set("Content-Type", "application/json");
       ctx.state.context.log.error(
@@ -26,9 +39,10 @@ export class ErrorController<
         `An unhandled error occurred: ${message}`,
         err,
         {
-          method,
-          url,
           status,
+          method,
+          url: `${url}`,
+          ms,
           ip,
         },
       );

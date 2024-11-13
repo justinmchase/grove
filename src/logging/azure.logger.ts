@@ -1,12 +1,12 @@
-import { snakeCase } from "../../deps/case.ts";
-import { base64Encode } from "../../deps/std.ts";
-import { Status } from "../../deps/oak.ts";
-import { LogLevel } from "./logLevel.ts";
+import { snakeCase } from "@wok/case";
+import { encodeBase64 } from "@std/encoding/base64";
+import { toSerializable } from "@justinmchase/serializable";
+import { Status } from "@oak/oak";
 import { Logger } from "./logger.ts";
 import { UnexpectedStatusError } from "../errors/mod.ts";
-import { toSerializable } from "../util/serializable.ts";
-import { readRequiredString, readString } from "../util/config.ts";
+import { readOptionalString, readRequiredString } from "../util/config.ts";
 import { hmacCreateKey, hmacSign } from "../util/hmac.ts";
+import type { LogLevel } from "./logLevel.ts";
 
 export class AzureLogger extends Logger {
   constructor(
@@ -17,10 +17,13 @@ export class AzureLogger extends Logger {
     super();
   }
 
-  public static async create(env: Record<string, string>) {
+  public static async create(
+    env: Record<string, string>,
+  ): Promise<AzureLogger> {
     const workspaceId = readRequiredString(env, "AZURE_ANALYTICS_WORKSPACE_ID");
     const secret = readRequiredString(env, "AZURE_ANALYTICS_WORKSPACE_SECRET");
-    const logType = readString(env, "AZURE_ANALYTICS_LOGTYPE", "Grove");
+    const logType = readOptionalString(env, "AZURE_ANALYTICS_LOGTYPE") ??
+      "Grove";
     const key = await hmacCreateKey(secret);
     return new AzureLogger(workspaceId, key, logType);
   }
@@ -56,7 +59,7 @@ export class AzureLogger extends Logger {
 
     // Signature=Base64(HMAC-SHA256(UTF8(StringToSign)))
     const signature = await hmacSign(this.cryptoKey, stringToSign);
-    const encodedSignature = base64Encode(signature);
+    const encodedSignature = encodeBase64(signature);
     const headers = new Headers({
       "Content-Type": "application/json",
       "Authorization": `SharedKey ${this.workspaceId}:${encodedSignature}`,

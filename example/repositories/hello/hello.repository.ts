@@ -1,6 +1,6 @@
-import { Collection, DbService } from "../../services/mod.ts";
-import { Hello } from "./hello.ts";
-import { Punctuation } from "./punctuation.ts";
+import type { Collection, DbService } from "../../services/mod.ts";
+import type { Hello } from "./hello.ts";
+import type { Punctuation } from "./punctuation.ts";
 
 export class HelloRepository {
   private readonly hellos: Collection<Hello>;

@@ -1,4 +1,4 @@
-import { Status } from "../../deps/oak.ts";
+import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 export class NotFoundError extends ApplicationError {

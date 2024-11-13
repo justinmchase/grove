@@ -1,8 +1,8 @@
-import { Command, EnumType } from "../deps/cliffy.ts";
-import { IContext } from "./context.ts";
+import { Command, EnumType } from "@cliffy/command";
+import { Type } from "@justinmchase/type";
 import { NotImplementedError } from "./errors/notimplemented.error.ts";
-import { IMode } from "./modes/mod.ts";
-import { Type } from "./util/type.ts";
+import type { IContext } from "./context.ts";
+import type { IMode } from "./modes/mod.ts";
 
 type InitApplicationContext<
   TContext extends IContext,
@@ -86,7 +86,9 @@ export class Grove<TContext extends IContext> {
           // In Deno Deploy the exit function is not allowed
           // Just ignore the error in this case
           // any other error throw
-          if (err.name !== "PermissionDenied") {
+          if (err instanceof Deno.errors.PermissionDenied) {
+            return;
+          } else {
             throw err;
           }
         }
@@ -138,10 +140,18 @@ export class Grove<TContext extends IContext> {
     try {
       await mode.run(args, context);
     } catch (err) {
-      context.log.error("grove_runtime_error", err.message, err, {
-        mode: mode.name,
-        args,
-      });
+      if (err instanceof Error) {
+        context.log.error("grove_runtime_error", err.message, err, {
+          mode: mode.name,
+          args,
+        });
+      } else {
+        context.log.error("grove_runtime_error", "Unknown error", new Error(), {
+          mode: mode.name,
+          args,
+          err,
+        });
+      }
     }
   }
 }

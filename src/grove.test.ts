@@ -1,15 +1,10 @@
-import {
-  assert,
-  assertEquals,
-  assertSpyCall,
-  assertSpyCalls,
-  stub,
-} from "../deps/std.ts";
-import { IContext } from "./context.ts";
+import { assert, assertEquals } from "@std/assert";
+import { assertSpyCall, assertSpyCalls, stub } from "@std/testing/mock";
 import { Grove } from "./grove.ts";
 import { MemoryLogger } from "./logging/mod.ts";
-import { IMode, IModeOption } from "./modes/mode.interface.ts";
-import { Type } from "./util/type.ts";
+import { Type } from "@justinmchase/type";
+import type { IMode, IModeOption } from "./modes/mode.interface.ts";
+import type { IContext } from "./context.ts";
 
 function failure(action: () => Promise<void>) {
   return async () => {

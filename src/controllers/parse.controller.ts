@@ -1,12 +1,11 @@
-import { accepts, Application, Request } from "../../deps/oak.ts";
-import { Controller } from "./controller.ts";
-import { IContext, IServices, IState } from "../context.ts";
+import type { Application, Request } from "@oak/oak";
+import type { Controller } from "./controller.ts";
+import type { IContext, IState } from "../context.ts";
 
 export class IsHtmlController<
-  TServices extends IServices,
-  TContext extends IContext<TServices>,
-  TState extends IState<TServices, TContext>,
-> implements Controller<TServices, TContext, TState> {
+  TContext extends IContext,
+  TState extends IState<TContext>,
+> implements Controller<TContext, TState> {
   public async use(app: Application<TState>): Promise<void> {
     app.use((ctx, next) => this.handler(ctx.request, ctx.state, next));
     await true;
@@ -19,7 +18,7 @@ export class IsHtmlController<
   ) {
     // If requesting from a browser, this will be true. If requesting from curl or an app
     // then request either */* or application/* and the true content type will be added to the header.
-    const isHtml = accepts(req, "application/*", "text/html") === "text/html";
+    const isHtml = !!req.accepts("application/*", "text/html");
     state.isHtml = isHtml;
     return await next();
   }

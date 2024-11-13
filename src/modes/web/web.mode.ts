@@ -1,7 +1,8 @@
-import { IContext, IState } from "../../context.ts";
-import { Application, Request } from "../../../deps/oak.ts";
-import { IMode, IModeOption } from "../mode.interface.ts";
-import { Type } from "../../util/type.ts";
+import type { Request } from "@oak/oak/request";
+import { Application } from "@oak/oak/application";
+import { Type } from "@justinmchase/type";
+import type { IContext, IState } from "../../context.ts";
+import type { IMode, IModeOption } from "../mode.interface.ts";
 
 type WebArgs = {
   port?: number;

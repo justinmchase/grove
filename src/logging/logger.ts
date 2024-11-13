@@ -1,5 +1,5 @@
 import { LogLevel } from "./logLevel.ts";
-import { ILogger } from "./logger.interface.ts";
+import type { ILogger } from "./logger.interface.ts";
 
 export abstract class Logger implements ILogger {
   public abstract log(
