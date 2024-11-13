@@ -4,7 +4,7 @@
 
 Grove is a
 [Hybrid Microservice](https://justinmchase.com/2023/03/11/hybrid-microservice-architecture/)
-framework for [Deno](https://deno.land).
+framework for [Deno](https://deno.land) and [Oak](https://jsr.io/@oak/oak).
 
 ## Usage
 
