@@ -6,11 +6,8 @@
     "jsr:@cliffy/internal@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@cliffy/table@1.0.0-rc.7": "1.0.0-rc.7",
     "jsr:@db/mongo@0.33": "0.33.0",
-    "jsr:@justinmchase/github-api@~0.5.11": "0.5.11",
+    "jsr:@justinmchase/github-api@0.5.13": "0.5.13",
     "jsr:@justinmchase/serializable@~0.3.13": "0.3.13",
-    "jsr:@justinmchase/serializable@~0.3.7": "0.3.8",
-    "jsr:@justinmchase/serializable@~0.3.8": "0.3.8",
-    "jsr:@justinmchase/type@~0.2.3": "0.2.3",
     "jsr:@justinmchase/type@~0.2.4": "0.2.4",
     "jsr:@lucsoft/web-bson@~0.3.1": "0.3.1",
     "jsr:@oak/commons@1": "1.0.0",
@@ -37,7 +34,7 @@
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/io@0.224": "0.224.9",
     "jsr:@std/io@0.225": "0.225.0",
-    "jsr:@std/log@~0.224.5": "0.224.9",
+    "jsr:@std/log@~0.224.5": "0.224.10",
     "jsr:@std/media-types@1": "1.0.3",
     "jsr:@std/path@1": "1.0.8",
     "jsr:@std/path@^1.0.7": "1.0.8",
@@ -83,30 +80,20 @@
         "jsr:@std/encoding@~0.220.1"
       ]
     },
-    "@justinmchase/github-api@0.5.11": {
-      "integrity": "601cc1bf85648ad4f0e648a8c028eef7d396f80c338a0c27bf5952cb7f4d704f",
+    "@justinmchase/github-api@0.5.13": {
+      "integrity": "fddca19a0f1cbe2e64fb7df83550c2a6e5d79e46a4fc94230b0d29222d2f702b",
       "dependencies": [
-        "jsr:@justinmchase/serializable@~0.3.7",
         "jsr:@std/async",
         "jsr:@std/encoding@^1.0.5",
         "jsr:@std/log",
         "jsr:@zaubrik/djwt"
       ]
     },
-    "@justinmchase/serializable@0.3.8": {
-      "integrity": "dca624e0ee2d8c9dad10d272fb0ebd55606bb3fa1627322e46d71594f4114c14",
-      "dependencies": [
-        "jsr:@justinmchase/type@~0.2.3"
-      ]
-    },
     "@justinmchase/serializable@0.3.13": {
       "integrity": "fdddf4a87ec11c75ee528f6c530f3e4209c072ec089f2fc11392e15b197ef93c",
       "dependencies": [
-        "jsr:@justinmchase/type@~0.2.4"
+        "jsr:@justinmchase/type"
       ]
-    },
-    "@justinmchase/type@0.2.3": {
-      "integrity": "bb516f56c9860752f25d43c0e61709980405c36b6ef227317eca4e0f7509dc5e"
     },
     "@justinmchase/type@0.2.4": {
       "integrity": "4852b04a1f8f905110e361392cd90a9f965e45eb0872fa84987b2a987f363cf5"
@@ -199,11 +186,11 @@
     "@std/io@0.225.0": {
       "integrity": "c1db7c5e5a231629b32d64b9a53139445b2ca640d828c26bf23e1c55f8c079b3"
     },
-    "@std/log@0.224.9": {
-      "integrity": "419d04e4d93e6b1a0205ac3f94809621cfec3d328d09fec9ec59cafa3b3fcaee",
+    "@std/log@0.224.10": {
+      "integrity": "8190cdec3759ce1d21ea3b0864fc561d8515bce591f30a4b9d26c68430c1b9d9",
       "dependencies": [
-        "jsr:@std/fmt@^1.0.2",
-        "jsr:@std/fs@^1.0.4",
+        "jsr:@std/fmt@^1.0.3",
+        "jsr:@std/fs@^1.0.5",
         "jsr:@std/io@0.225"
       ]
     },
@@ -1042,7 +1029,7 @@
     "dependencies": [
       "jsr:@cliffy/command@^1.0.0-rc.7",
       "jsr:@db/mongo@0.33",
-      "jsr:@justinmchase/github-api@~0.5.11",
+      "jsr:@justinmchase/github-api@0.5.13",
       "jsr:@justinmchase/serializable@~0.3.13",
       "jsr:@justinmchase/type@~0.2.4",
       "jsr:@oak/oak@^17.1.3",

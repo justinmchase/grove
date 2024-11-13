@@ -1,38 +1,31 @@
-import { api, GitHubApplication, GitHubClient } from "@justinmchase/github-api";
-import { SignatureError } from "../../errors/signature.error.ts";
-import { hmacCreateKey, hmacVerify } from "../../util/hmac.ts";
-import { MemoryCache } from "../../util/cache.ts";
+import { credentials, GitHubClient } from "@justinmchase/github-api";
+import type { GitHubCredentialProvider } from "@justinmchase/github-api";
+import { SignatureError } from "../errors/signature.error.ts";
+import { hmacCreateKey, hmacVerify } from "../util/hmac.ts";
+import { MemoryCache } from "../util/cache.ts";
 import type { Request } from "@oak/oak/request";
-import type { ILogger } from "../../logging/mod.ts";
+import type { ILogger } from "../logging/mod.ts";
 
-export interface IGitHubConfig {
-  githubAppId: number;
-  githubPrivateKey: string;
+type GitHubConfig = {
+  githubAppId?: number;
+  githubPrivateKey?: string;
+  githubPat?: string;
   githubWebhookSecret?: string;
-}
+};
 
 export class GitHubService {
-  private readonly app: GitHubApplication;
   private readonly cache = new MemoryCache();
   constructor(
-    appId: number,
-    privateKey: string,
-    private readonly secret?: CryptoKey,
+    private readonly credentialProvider: GitHubCredentialProvider,
+    private readonly webhookKey?: CryptoKey,
   ) {
-    this.app = new GitHubApplication(
-      appId,
-      privateKey,
-    );
   }
 
   public static async create(
     log: ILogger,
-    config: IGitHubConfig,
+    config: GitHubConfig,
   ): Promise<GitHubService> {
     const { githubAppId, githubPrivateKey, githubWebhookSecret } = config;
-    const secret = githubWebhookSecret
-      ? await hmacCreateKey(githubWebhookSecret)
-      : undefined;
 
     log.debug(
       "github_service",
@@ -43,15 +36,18 @@ export class GitHubService {
         githubWebhookSecret: !!githubWebhookSecret,
       },
     );
+    const credentialProvider = credentials(config);
+    const secret = githubWebhookSecret
+      ? await hmacCreateKey(githubWebhookSecret)
+      : undefined;
     return new GitHubService(
-      githubAppId,
-      githubPrivateKey,
+      credentialProvider,
       secret,
     );
   }
 
   public async verify(req: Request) {
-    if (this.secret) {
+    if (this.webhookKey) {
       const signature = req.headers.get("X-Hub-Signature-256");
       if (!signature) {
         throw new SignatureError("invalid signature");
@@ -59,7 +55,7 @@ export class GitHubService {
       const [, sig] = signature.split("=");
       const bytes = await req.body.arrayBuffer();
       const verified = await hmacVerify(
-        this.secret,
+        this.webhookKey,
         sig,
         bytes,
       );
@@ -72,18 +68,8 @@ export class GitHubService {
   public async token(installationId: number): Promise<string> {
     return await this.cache.get(
       `installation_token_${installationId}`,
-      async () => {
-        const jwt = await this.app.jwt();
-        const client = new GitHubClient({
-          accessToken: jwt,
-        });
-        const result = await api.app.installations.accessTokens({
-          installationId,
-          client,
-        });
-        const { token } = result;
-        return token;
-      },
+      async () =>
+        await this.credentialProvider.installationToken(installationId),
     );
   }
 

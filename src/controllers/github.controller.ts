@@ -7,7 +7,7 @@ import type {
   GitHubInstallationEvent,
   GitHubPingEvent,
 } from "@justinmchase/github-api";
-import type { GitHubService } from "../services/github/mod.ts";
+import type { GitHubService } from "../services/github.service.ts";
 import type { IContext, IState } from "../context.ts";
 import type { Controller } from "./controller.ts";
 import type { ILogger } from "../logging/mod.ts";

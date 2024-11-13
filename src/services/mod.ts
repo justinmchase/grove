@@ -1,2 +1,2 @@
-export * from "./github/mod.ts";
-export * from "./mongo/mod.ts";
+export * from "./github.service.ts";
+export * from "./mongo.service.ts";
