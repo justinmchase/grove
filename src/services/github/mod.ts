@@ -69,7 +69,7 @@ export class GitHubService {
     }
   }
 
-  private async token(installationId: number) {
+  public async token(installationId: number) {
     return await this.cache.get(
       `installation_token_${installationId}`,
       async () => {
