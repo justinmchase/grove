@@ -1,5 +1,6 @@
-import { Application, Context, Status, STATUS_TEXT } from "../../deps/oak.ts";
-import { IContext, IState } from "../context.ts";
+import type { Application, Context } from "@oak/oak";
+import { Status, STATUS_TEXT } from "@oak/oak";
+import type { IContext, IState } from "../context.ts";
 import { Controller } from "./controller.ts";
 
 export class NotFoundController<

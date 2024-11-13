@@ -1,4 +1,4 @@
-import { snakeCase } from "../../deps/case.ts";
+import { snakeCase } from "@wok/case";
 import {
   bgBlue,
   bgRed,
@@ -7,8 +7,8 @@ import {
   brightWhite,
   red,
   yellow,
-} from "../../deps/std.ts";
-import { toSerializable } from "../util/serializable.ts";
+} from "@std/fmt/colors";
+import { toSerializable } from "@justinmchase/serializable";
 import { LogLevel } from "./logLevel.ts";
 import { Logger } from "./logger.ts";
 
@@ -16,7 +16,7 @@ export class ConsoleLogger extends Logger {
   private readonly isTTY: boolean;
   constructor() {
     super();
-    this.isTTY = Deno.isatty(Deno.stdout.rid);
+    this.isTTY = Deno.stdout.isTerminal();
   }
   public async log(
     level: LogLevel,

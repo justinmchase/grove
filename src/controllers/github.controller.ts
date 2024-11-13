@@ -1,21 +1,16 @@
-import {
-  Application,
-  Request,
-  Response,
-  Router,
-  Status,
-} from "../../deps/oak.ts";
-import {
+import { Router, Status } from "@oak/oak";
+import type { Application, Request, Response } from "@oak/oak";
+import type {
   GitHubDeploymentProtectionRuleEvent,
   GitHubEvent,
   GitHubEventName,
   GitHubInstallationEvent,
   GitHubPingEvent,
-} from "../../deps/github.ts";
-import { GitHubService } from "../services/github/mod.ts";
-import { IContext, IState } from "../context.ts";
-import { Controller } from "./controller.ts";
-import { ILogger } from "../logging/mod.ts";
+} from "@justinmchase/github-api";
+import type { GitHubService } from "../services/github/mod.ts";
+import type { IContext, IState } from "../context.ts";
+import type { Controller } from "./controller.ts";
+import type { ILogger } from "../logging/mod.ts";
 
 export interface IGitHubWebhookConfig {
   githubWebhookPath: string;
@@ -55,8 +50,9 @@ export abstract class GithubWebhookController<
       | "ping"
       | "installation";
     await this.github.verify(req);
-    const body = await req.body({ type: "json" }).value;
-    const event = body as GitHubEvent | GitHubDeploymentProtectionRuleEvent;
+    const event = await req.body.json() as
+      | GitHubEvent
+      | GitHubDeploymentProtectionRuleEvent;
     const { action, sender, repository } = event;
     log.info(
       "github_webhook",
@@ -86,7 +82,7 @@ export abstract class GithubWebhookController<
           event as GitHubDeploymentProtectionRuleEvent,
         );
       default:
-        return await this.unsupportedEvent(log, githubEvent, res, body);
+        return await this.unsupportedEvent(log, githubEvent, res, event);
     }
   }
 

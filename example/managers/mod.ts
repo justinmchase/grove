@@ -1,5 +1,5 @@
-import { Repositories } from "../repositories/mod.ts";
 import { HelloManager } from "./hello.manager.ts";
+import type { Repositories } from "../repositories/mod.ts";
 
 export * from "./hello.manager.ts";
 

@@ -1,14 +1,14 @@
-import { Status } from "../../deps/oak.ts";
+import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 export class NotImplementedError extends ApplicationError {
   constructor(
-    public readonly message = "not implemented",
+    public readonly details: string,
   ) {
     super(
       Status.InternalServerError,
       "E_NOT_IMPLEMENTED",
-      message,
+      "not implemented",
     );
   }
 }

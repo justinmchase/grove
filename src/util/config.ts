@@ -1,36 +1,37 @@
-import { dotenv } from "../../deps/dotenv.ts";
+import { load } from "@std/dotenv";
 import { ConfigError } from "../errors/config.error.ts";
 
-export async function getEnv() {
+export async function getEnv(): Promise<Record<string, string>> {
   return {
-    ...await dotenv(),
+    ...await load(),
     ...Deno.env.toObject(),
   };
 }
 
-export function readString(
+export function readOptionalString(
   env: Record<string, string>,
   key: string,
-  defaultValue?: string,
-) {
-  return env[key] ?? defaultValue;
+): string | undefined {
+  return env[key];
 }
 
-export function readRequiredString(env: Record<string, string>, key: string) {
+export function readRequiredString(
+  env: Record<string, string>,
+  key: string,
+): string {
   if (env[key] == null) {
     throw new ConfigError(key, "is required");
   }
   return env[key];
 }
 
-export function readInt(
+export function readOptionalInt(
   env: Record<string, string>,
   key: string,
-  defaultValue: number,
-) {
+): number | undefined {
   const value = env[key];
   if (value === undefined) {
-    return defaultValue;
+    return undefined;
   }
 
   const parsedValue = parseInt(value);

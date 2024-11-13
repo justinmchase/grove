@@ -1,5 +1,5 @@
-import { Services } from "../services/mod.ts";
 import { HelloRepository } from "./hello/mod.ts";
+import type { Services } from "../services/mod.ts";
 
 export * from "./hello/mod.ts";
 

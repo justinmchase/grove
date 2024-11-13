@@ -1,8 +1,8 @@
-import { IJob } from "../../src/modes/job/job.interface.ts";
-import { IModeOption } from "../../src/modes/mode.interface.ts";
-import { Type } from "../../src/util/type.ts";
-import { JobContext } from "../context.ts";
+import { Type } from "@justinmchase/type";
 import { Punctuation } from "../repositories/hello/punctuation.ts";
+import type { IModeOption } from "../../src/modes/mode.interface.ts";
+import type { JobContext } from "../context.ts";
+import type { IJob } from "../../src/modes/job/job.interface.ts";
 
 type HelloArgs = {
   name?: string;

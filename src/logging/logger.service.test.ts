@@ -1,5 +1,5 @@
-import { assertSpyCall, assertSpyCalls, stub } from "../../deps/std.ts";
-import { ISerializable } from "../util/serializable.ts";
+import { assertSpyCall, assertSpyCalls, stub } from "@std/testing/mock";
+import type { SerializableRecord } from "@justinmchase/serializable";
 import { ConsoleLogger } from "./console.logger.ts";
 import { LogLevel } from "./logLevel.ts";
 
@@ -8,7 +8,7 @@ function logAsserter(logger: ConsoleLogger) {
     level: LogLevel,
     name: string,
     message: string,
-    data: ISerializable,
+    data: SerializableRecord,
     result: string,
   ) => {
     const consoleLog = stub(console, "log");
@@ -29,7 +29,7 @@ function logErrorAsserter(logger: ConsoleLogger) {
     name: string,
     message: string,
     error: Error,
-    data: ISerializable,
+    data: SerializableRecord,
     result: string,
   ) => {
     const consoleLog = stub(console, "log");

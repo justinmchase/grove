@@ -1,4 +1,4 @@
-import { Punctuation } from "./punctuation.ts";
+import type { Punctuation } from "./punctuation.ts";
 
 export type Hello = {
   _id: number;

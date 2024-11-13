@@ -1,7 +1,7 @@
-import { IContext, IState } from "../src/mod.ts";
-import { Services } from "./services/mod.ts";
-import { Repositories } from "./repositories/mod.ts";
-import { Managers } from "./managers/mod.ts";
+import type { IContext, IState } from "../src/mod.ts";
+import type { Services } from "./services/mod.ts";
+import type { Repositories } from "./repositories/mod.ts";
+import type { Managers } from "./managers/mod.ts";
 
 export type { Services } from "./services/mod.ts";
 

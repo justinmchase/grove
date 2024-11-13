@@ -1,5 +1,5 @@
-import { IContext } from "../../context.ts";
-import { IModeOption } from "../mode.interface.ts";
+import type { IContext } from "../../context.ts";
+import type { IModeOption } from "../mode.interface.ts";
 
 export interface IJob<TContext extends IContext> {
   name: string;

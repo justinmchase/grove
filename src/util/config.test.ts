@@ -1,18 +1,22 @@
-import { assertEquals, assertThrows } from "../../deps/std.ts";
+import { assertEquals, assertThrows } from "@std/assert";
 import { ConfigError } from "../errors/config.error.ts";
-import { readInt, readRequiredString, readString } from "./config.ts";
+import {
+  readOptionalInt,
+  readOptionalString,
+  readRequiredString,
+} from "./config.ts";
 
 Deno.test({
   name: "config_readString_00",
   fn: () => {
-    const actual = readString({ a: "abc" }, "a");
+    const actual = readOptionalString({ a: "abc" }, "a");
     assertEquals(actual, "abc");
   },
 });
 Deno.test({
   name: "config_readString_01",
   fn: () => {
-    const actual = readString({ a: "abc" }, "b", "xyz");
+    const actual = readOptionalString({ a: "abc" }, "b") ?? "xyz";
     assertEquals(actual, "xyz");
   },
 });
@@ -37,14 +41,14 @@ Deno.test({
 Deno.test({
   name: "config_readInt_00",
   fn: () => {
-    const actual = readInt({ a: "1" }, "a", 0);
+    const actual = readOptionalInt({ a: "1" }, "a") ?? 0;
     assertEquals(actual, 1);
   },
 });
 Deno.test({
   name: "config_readInt_01",
   fn: () => {
-    const actual = readInt({ a: "1" }, "b", 7);
+    const actual = readOptionalInt({ a: "1" }, "b") ?? 7;
     assertEquals(actual, 7);
   },
 });
@@ -52,7 +56,7 @@ Deno.test({
   name: "config_readInt_02",
   fn: () => {
     assertThrows(
-      () => readInt({ a: "xyz" }, "a", 0),
+      () => readOptionalInt({ a: "xyz" }, "a"),
       ConfigError,
       "Invalid configuration. Key [a] (xyz) is not an integer.",
       "readInt is expected to throw but isn't",

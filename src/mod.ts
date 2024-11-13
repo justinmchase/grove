@@ -1,6 +1,4 @@
 export * as oak from "../deps/oak.ts";
-export * as gh from "../deps/github.ts";
-export * as mongo from "../deps/mongo.ts";
 
 export * from "./context.ts";
 export * from "./grove.ts";

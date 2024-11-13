@@ -1,4 +1,4 @@
-import { LogLevel } from "./logLevel.ts";
+import type { LogLevel } from "./logLevel.ts";
 import { Logger } from "./logger.ts";
 
 export class MemoryLogger extends Logger {

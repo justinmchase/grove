@@ -1,10 +1,10 @@
-import { Status } from "../../deps/oak.ts";
-import { Serializable } from "../util/serializable.ts";
+import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
+import type { Serializable } from "@justinmchase/serializable";
 
 export class ExpectedError extends ApplicationError {
   constructor(
-    public readonly name: string,
+    public readonly propertyName: string,
     public readonly actualValue: Serializable,
     public readonly possibilities?: string[],
   ) {
@@ -12,7 +12,7 @@ export class ExpectedError extends ApplicationError {
       Status.BadRequest,
       "E_EXPECTED",
       [
-        `The property ${name} was expected but was actually ${
+        `The property ${propertyName} was expected but was actually ${
           JSON.stringify(actualValue)
         }`,
         possibilities ? `Possible values include [${possibilities}].` : "",

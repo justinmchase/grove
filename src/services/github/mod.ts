@@ -1,13 +1,9 @@
-import { base64Encode } from "../../../deps/std.ts";
-import { Request } from "../../../deps/oak.ts";
+import { api, GitHubApplication, GitHubClient } from "@justinmchase/github-api";
 import { SignatureError } from "../../errors/signature.error.ts";
-import { ILogger } from "../../logging/mod.ts";
 import { hmacCreateKey, hmacVerify } from "../../util/hmac.ts";
-import {
-  appJwt,
-  createInstallationToken,
-  GitHubClient,
-} from "../../../deps/github.ts";
+import { MemoryCache } from "../../util/cache.ts";
+import type { Request } from "@oak/oak/request";
+import type { ILogger } from "../../logging/mod.ts";
 
 export interface IGitHubConfig {
   githubAppId: number;
@@ -16,17 +12,26 @@ export interface IGitHubConfig {
 }
 
 export class GitHubService {
+  private readonly app: GitHubApplication;
+  private readonly cache = new MemoryCache();
   constructor(
-    private readonly appId: number,
-    private readonly privateKey: string,
+    appId: number,
+    privateKey: string,
     private readonly secret?: CryptoKey,
   ) {
+    this.app = new GitHubApplication(
+      appId,
+      privateKey,
+    );
   }
 
-  public static async create(log: ILogger, config: IGitHubConfig) {
+  public static async create(
+    log: ILogger,
+    config: IGitHubConfig,
+  ): Promise<GitHubService> {
     const { githubAppId, githubPrivateKey, githubWebhookSecret } = config;
     const secret = githubWebhookSecret
-      ? await hmacCreateKey(base64Encode(githubWebhookSecret))
+      ? await hmacCreateKey(githubWebhookSecret)
       : undefined;
 
     log.debug(
@@ -52,7 +57,7 @@ export class GitHubService {
         throw new SignatureError("invalid signature");
       }
       const [, sig] = signature.split("=");
-      const bytes = await req.body({ type: "bytes" }).value;
+      const bytes = await req.body.arrayBuffer();
       const verified = await hmacVerify(
         this.secret,
         sig,
@@ -65,29 +70,24 @@ export class GitHubService {
   }
 
   private async token(installationId: number) {
-    if (!this.appId) {
-      throw new Error(`invalid appId ${this.appId}`);
-    }
-
-    if (!this.privateKey) {
-      throw new Error(`invalid privateKey`);
-    }
-
-    // todo: cache the token for a minute at least to reduce calls to this api
-    const jwt = await appJwt(`${this.appId}`, this.privateKey);
-    const { token } = await createInstallationToken(
-      jwt,
-      `${installationId}`,
+    return await this.cache.get(
+      `installation_token_${installationId}`,
+      async () => {
+        const jwt = await this.app.jwt();
+        const client = new GitHubClient({
+          accessToken: jwt,
+        });
+        const result = await api.app.installations.accessTokens({
+          installationId,
+          client,
+        });
+        const { token } = result;
+        return token;
+      },
     );
-    if (!token) {
-      throw new Error(
-        `inavlid token ${installationId} ${this.appId} ${this.privateKey}`,
-      );
-    }
-    return token;
   }
 
-  public async client(installationId: number) {
+  public async client(installationId: number): Promise<GitHubClient> {
     const accessToken = await this.token(installationId);
     return new GitHubClient({
       accessToken,

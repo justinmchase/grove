@@ -1,4 +1,5 @@
-import { HelloRepository, Punctuation } from "../repositories/mod.ts";
+import { Punctuation } from "../repositories/mod.ts";
+import type { HelloRepository } from "../repositories/mod.ts";
 
 export class HelloManager {
   constructor(private readonly hellos: HelloRepository) {}

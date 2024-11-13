@@ -1,14 +1,9 @@
-import {
-  Application,
-  Controller,
-  ILogger,
-  Request,
-  Response,
-  Router,
-  Status,
-} from "../../../src/mod.ts";
-import { Context, State } from "../../context.ts";
-import { HelloManager } from "../../managers/hello.manager.ts";
+import { Router, Status } from "@oak/oak";
+import type { Application, Request, Response } from "@oak/oak";
+import type { Context, State } from "../../context.ts";
+import type { HelloManager } from "../../managers/hello.manager.ts";
+import type { Controller } from "../../../src/controllers/controller.ts";
+import type { ILogger } from "../../../src/logging/logger.interface.ts";
 
 export class HelloController implements Controller<Context, State> {
   constructor(
@@ -33,7 +28,7 @@ export class HelloController implements Controller<Context, State> {
   }
 
   private async handler(log: ILogger, req: Request, res: Response) {
-    const data = req.hasBody ? await req.body({ type: "json" }).value : {};
+    const data = req.hasBody ? await req.body.json() : {};
     const { name = "World", punctuation = "!" } = data;
     const hello = await this.hellos.create({ name, punctuation });
     await log.info(

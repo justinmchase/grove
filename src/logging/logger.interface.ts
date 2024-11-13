@@ -1,4 +1,4 @@
-import { LogLevel } from "./logLevel.ts";
+import type { LogLevel } from "./logLevel.ts";
 
 export interface ILogger {
   log(

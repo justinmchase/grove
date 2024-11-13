@@ -1,6 +1,7 @@
-import { Application, Response, Router, Status } from "../../deps/oak.ts";
-import { IContext, IState } from "../context.ts";
-import { Controller } from "./controller.ts";
+import { Router, Status } from "@oak/oak";
+import type { Application, Response } from "@oak/oak";
+import type { IContext, IState } from "../context.ts";
+import type { Controller } from "./controller.ts";
 
 export class HealthController<
   TContext extends IContext,

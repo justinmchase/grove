@@ -1,10 +1,6 @@
-import {
-  Database,
-  Document,
-  MongoClient,
-  parseConnectionString,
-} from "../../../deps/mongo.ts";
-import { ILogger } from "../../mod.ts";
+import { MongoClient } from "@db/mongo/client";
+import type { Collection, Database, Document } from "@db/mongo";
+import type { ILogger } from "../../mod.ts";
 
 export interface IMongoConfig {
   mongoConnectionString: string;
@@ -17,7 +13,9 @@ export class MongoService {
   ) {
   }
 
-  public collection<T extends Document = Document>(name: string) {
+  public collection<T extends Document = Document>(
+    name: string,
+  ): Collection<T> {
     return this.db.collection<T>(name);
   }
 
@@ -28,7 +26,7 @@ export class MongoService {
   public static async create(
     logging: ILogger,
     config: IMongoConfig,
-  ) {
+  ): Promise<MongoService> {
     const { mongoConnectionString } = config;
     if (!mongoConnectionString) {
       logging.warn(
@@ -38,18 +36,17 @@ export class MongoService {
     }
 
     const client = new MongoClient();
-    const options = await parseConnectionString(mongoConnectionString);
-    if (mongoConnectionString.indexOf("localhost") === -1) {
-      options.tls = true;
-    }
-    const db = await client.connect(options);
+    // todo: this got removed in the latest version of this library, not sure if its needed anymore or not
+    // const options = await parseConnectionString(mongoConnectionString);
+    // if (mongoConnectionString.indexOf("localhost") === -1) {
+    //   options.tls = true;
+    // }
+    const db = await client.connect(mongoConnectionString);
     logging.info(
       `mongo`,
       "mongo connected",
       {
-        db: options.db,
-        servers: options.servers,
-        appname: options.appname,
+        name: db.name,
       },
     );
     return new MongoService(client, db);
