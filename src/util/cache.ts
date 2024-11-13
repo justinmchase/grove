@@ -18,7 +18,7 @@ export class MemoryCache {
     refresh: () => Promise<T>,
     ttl: number = 60000,
   ): Promise<T> {
-    if (!this.cache.has(key)) {
+    if (this.cache.has(key)) {
       return this.cache.get(key)!.value as T;
     } else {
       const value = await refresh();
