@@ -46,7 +46,7 @@ export class GitHubService {
     );
   }
 
-  public async check() {
+  public async check(): Promise<void> {
     return await this.credentialProvider.check();
   }
 
