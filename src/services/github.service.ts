@@ -4,7 +4,7 @@ import { SignatureError } from "../errors/signature.error.ts";
 import { hmacCreateKey, hmacVerify } from "../util/hmac.ts";
 import { MemoryCache } from "../util/cache.ts";
 import type { Request } from "@oak/oak/request";
-import type { ILogger } from "../logging/mod.ts";
+import type { Logger } from "../logging/mod.ts";
 
 type GitHubConfig = {
   githubAppId?: number;
@@ -22,17 +22,17 @@ export class GitHubService {
   }
 
   public static async create(
-    log: ILogger,
+    log: Logger,
     config: GitHubConfig,
   ): Promise<GitHubService> {
-    const { githubAppId, githubPrivateKey, githubWebhookSecret } = config;
-
+    const { githubAppId, githubPrivateKey, githubPat, githubWebhookSecret } =
+      config;
     log.debug(
-      "github_service",
       "github service initializing",
       {
         githubAppId,
         githubPrivateKey: !!githubPrivateKey,
+        githubPat: !!githubPat,
         githubWebhookSecret: !!githubWebhookSecret,
       },
     );

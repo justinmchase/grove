@@ -1,8 +1,8 @@
 import type { State } from "@oak/oak";
-import type { ILogger } from "./logging/mod.ts";
+import type { Logger } from "./logging/mod.ts";
 
 export interface IContext {
-  log: ILogger;
+  log: Logger;
 }
 
 export interface IState<

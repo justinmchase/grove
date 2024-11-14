@@ -1,22 +1,19 @@
 import type { LogLevel } from "./logLevel.ts";
-import { Logger } from "./logger.ts";
+import { BaseLogger } from "./base.logger.ts";
 
-export class MemoryLogger extends Logger {
+export class MemoryLogger extends BaseLogger {
   public readonly logs: {
     level: LogLevel;
-    name: string;
     message: string;
     data: Record<string, unknown>;
   }[] = [];
   public async log(
     level: LogLevel,
-    name: string,
     message: string,
     data: Record<string, unknown>,
   ) {
     await this.logs.push({
       level,
-      name,
       message,
       data,
     });

@@ -1,14 +1,13 @@
-import { snakeCase } from "@wok/case";
 import { encodeBase64 } from "@std/encoding/base64";
 import { toSerializable } from "@justinmchase/serializable";
 import { Status } from "@oak/oak";
-import { Logger } from "./logger.ts";
+import { BaseLogger } from "./base.logger.ts";
 import { UnexpectedStatusError } from "../errors/mod.ts";
 import { readOptionalString, readRequiredString } from "../util/config.ts";
 import { hmacCreateKey, hmacSign } from "../util/hmac.ts";
 import type { LogLevel } from "./logLevel.ts";
 
-export class AzureLogger extends Logger {
+export class AzureLogger extends BaseLogger {
   constructor(
     private readonly workspaceId: string,
     private readonly cryptoKey: CryptoKey,
@@ -30,17 +29,14 @@ export class AzureLogger extends Logger {
 
   public async log(
     level: LogLevel,
-    name: string,
     message: string,
-    data: Record<string, unknown>,
+    data: Record<keyof unknown, unknown>,
   ) {
-    const n = snakeCase(name);
     const m = JSON.stringify(message.replace(/"/g, "'"));
     const d = JSON.stringify(toSerializable(data));
-    const line = `${level} ${n} ${m} ${d}`;
+    const line = `${level} ${m} ${d}`;
     const json = JSON.stringify([{
       level,
-      name: n,
       message: m,
       data: d,
       line,

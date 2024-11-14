@@ -1,41 +1,34 @@
 import type { LogLevel } from "./logLevel.ts";
 
-export interface ILogger {
+export type Logger = {
   log(
     level: LogLevel,
-    name: string,
     message: string,
-    data?: Record<string, unknown>,
+    data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
   trace(
-    name: string,
     message: string,
-    data?: Record<string, unknown>,
+    data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
   debug(
-    name: string,
     message: string,
-    data?: Record<string, unknown>,
+    data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
   warn(
-    name: string,
     message: string,
-    data?: Record<string, unknown>,
+    data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
   info(
-    name: string,
     message: string,
-    data?: Record<string, unknown>,
+    data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
   error(
-    name: string,
     message: string,
-    error: Error,
-    data?: Record<string, unknown>,
+    error: unknown,
+    data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
   critical(
-    name: string,
     message: string,
-    data?: Record<string, unknown>,
+    data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
-}
+};

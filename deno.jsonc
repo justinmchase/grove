@@ -1,7 +1,15 @@
 {
   "name": "@justinmchase/grove",
   "version": "0.5.4",
-  "exports": "./mod.ts",
+  "exports": {
+    ".": "./mod.ts",
+    "./controllers": "./src/controllers/mod.ts",
+    "./errors": "./src/errors/mod.ts",
+    "./logging": "./src/logging/mod.ts",
+    "./modes": "./src/modes/mod.ts",
+    "./services": "./src/services/mod.ts",
+    "./util": "./src/util/mod.ts"
+  },
   "tasks": {
     "check": "deno fmt && deno lint && deno test && npx jsr publish --dry-run --allow-dirty",
     "example": "deno run -A example/main.ts",
