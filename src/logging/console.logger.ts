@@ -1,4 +1,3 @@
-import { snakeCase } from "@wok/case";
 import {
   bgBlue,
   bgRed,
@@ -10,9 +9,9 @@ import {
 } from "@std/fmt/colors";
 import { toSerializable } from "@justinmchase/serializable";
 import { LogLevel } from "./logLevel.ts";
-import { Logger } from "./logger.ts";
+import { BaseLogger } from "./base.logger.ts";
 
-export class ConsoleLogger extends Logger {
+export class ConsoleLogger extends BaseLogger {
   private readonly isTTY: boolean;
   constructor() {
     super();
@@ -20,11 +19,9 @@ export class ConsoleLogger extends Logger {
   }
   public async log(
     level: LogLevel,
-    name: string,
     message: string,
-    data: Record<string, unknown>,
+    data: Record<keyof unknown, unknown>,
   ) {
-    const n = snakeCase(name);
     const m = JSON.stringify((message ?? "").replace(/"/g, "'"));
     const d = JSON.stringify(toSerializable(data));
     const l = (() => {
@@ -47,6 +44,6 @@ export class ConsoleLogger extends Logger {
         return level;
       }
     })();
-    await console.log(`${l} ${n} ${m} ${d}`);
+    await console.log(`${l} ${m} ${d}`);
   }
 }

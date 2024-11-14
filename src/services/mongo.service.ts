@@ -1,6 +1,6 @@
 import { MongoClient } from "@db/mongo/client";
 import type { Collection, Database, Document } from "@db/mongo";
-import type { ILogger } from "../../mod.ts";
+import type { Logger } from "../../mod.ts";
 
 export interface IMongoConfig {
   mongoConnectionString: string;
@@ -24,7 +24,7 @@ export class MongoService {
   }
 
   public static async create(
-    logging: ILogger,
+    logging: Logger,
     config: IMongoConfig,
   ): Promise<MongoService> {
     const { mongoConnectionString } = config;
@@ -43,11 +43,8 @@ export class MongoService {
     // }
     const db = await client.connect(mongoConnectionString);
     logging.info(
-      `mongo`,
       "mongo connected",
-      {
-        name: db.name,
-      },
+      { name: db.name },
     );
     return new MongoService(client, db);
   }

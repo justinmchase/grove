@@ -22,7 +22,6 @@ export class LogController<
       const ms = `${t}ms`;
       const { response: { status } } = ctx;
       ctx.state.context.log.info(
-        "request",
         `${status} ${method} ${url.pathname} ${ms}`,
         {
           status,

@@ -59,7 +59,7 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
 
   public async run(args: WebArgs, context: TContext) {
     const { port, hostname } = args;
-    context.log.info("grove_web_start", `Server starting...`, { port });
+    context.log.info(`Server starting...`, { port });
     const app = new Application<TState>();
     app.use(async (ctx, next) => {
       ctx.state.context = context;
@@ -68,11 +68,8 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
     await this.config.initControllers(context, app);
     app.addEventListener("listen", (_event) => {
       context.log.info(
-        "grove_web_listening",
         `Listening on http://${hostname}:${port}`,
-        {
-          port,
-        },
+        { port },
       );
     });
     app.addEventListener("error", (err) => {
@@ -81,7 +78,6 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
         err.context?.request ||
         {} as Request;
       context.log.error(
-        "grove_web_error",
         `unexpected server error: ${err.message}`,
         {
           timeStamp,

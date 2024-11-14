@@ -108,7 +108,6 @@ export class Grove<TContext extends IContext> {
       // todo: use after https://github.com/c4spar/deno-cliffy/issues/655 is resolved
       const defaultMode = this.config.modes[0].name;
       context.log.info(
-        "grove_default_mode",
         `no mode specified, using default mode ${defaultMode}`,
         { mode: defaultMode, args },
       );
@@ -133,25 +132,17 @@ export class Grove<TContext extends IContext> {
 
   private async run(args: unknown, context: TContext, mode: IMode<TContext>) {
     const { name } = mode;
-    context.log.info("grove_run", `grove running mode ${name}`, {
+    context.log.info(`grove running mode ${name}`, {
       mode: name,
       args,
     });
     try {
       await mode.run(args, context);
     } catch (err) {
-      if (err instanceof Error) {
-        context.log.error("grove_runtime_error", err.message, err, {
-          mode: mode.name,
-          args,
-        });
-      } else {
-        context.log.error("grove_runtime_error", "Unknown error", new Error(), {
-          mode: mode.name,
-          args,
-          err,
-        });
-      }
+      context.log.error("grove error", err, {
+        mode: mode.name,
+        args,
+      });
     }
   }
 }

@@ -6,14 +6,13 @@ import { LogLevel } from "./logLevel.ts";
 function logAsserter(logger: ConsoleLogger) {
   return (
     level: LogLevel,
-    name: string,
     message: string,
     data: SerializableRecord,
     result: string,
   ) => {
     const consoleLog = stub(console, "log");
     try {
-      logger.log(level, name, message, data);
+      logger.log(level, message, data);
       assertSpyCalls(consoleLog, 1);
       assertSpyCall(consoleLog, 0, {
         args: [result],
@@ -26,7 +25,6 @@ function logAsserter(logger: ConsoleLogger) {
 }
 function logErrorAsserter(logger: ConsoleLogger) {
   return (
-    name: string,
     message: string,
     error: Error,
     data: SerializableRecord,
@@ -35,7 +33,7 @@ function logErrorAsserter(logger: ConsoleLogger) {
     const consoleLog = stub(console, "log");
     error.stack = "<stack>";
     try {
-      logger.error(name, message, error, data);
+      logger.error(message, error, data);
       assertSpyCalls(consoleLog, 1);
       assertSpyCall(consoleLog, 0, {
         args: [result],
@@ -59,10 +57,9 @@ Deno.test({
       fn: () =>
         assertLog(
           LogLevel.Trace,
-          "example_test",
           "log test",
           {},
-          'T example_test "log test" {}',
+          'T "log test" {}',
         ),
     });
     await t.step({
@@ -70,10 +67,9 @@ Deno.test({
       fn: () =>
         assertLog(
           LogLevel.Debug,
-          "example_test",
           "log test",
           {},
-          'D example_test "log test" {}',
+          'D "log test" {}',
         ),
     });
     await t.step({
@@ -81,10 +77,9 @@ Deno.test({
       fn: () =>
         assertLog(
           LogLevel.Warn,
-          "example_test",
           "log test",
           {},
-          'W example_test "log test" {}',
+          'W "log test" {}',
         ),
     });
     await t.step({
@@ -92,10 +87,9 @@ Deno.test({
       fn: () =>
         assertLog(
           LogLevel.Info,
-          "example_test",
           "log test",
           {},
-          'I example_test "log test" {}',
+          'I "log test" {}',
         ),
     });
     await t.step({
@@ -103,10 +97,9 @@ Deno.test({
       fn: () =>
         assertLog(
           LogLevel.Error,
-          "example_test",
           "log test",
           {},
-          'E example_test "log test" {}',
+          'E "log test" {}',
         ),
     });
     await t.step({
@@ -114,54 +107,18 @@ Deno.test({
       fn: () =>
         assertLog(
           LogLevel.Critical,
-          "example_test",
           "log test",
           {},
-          'C example_test "log test" {}',
-        ),
-    });
-    await t.step({
-      name: "log_name_00",
-      fn: () =>
-        assertLog(
-          LogLevel.Debug,
-          "example test",
-          "log test",
-          {},
-          'D example_test "log test" {}',
-        ),
-    });
-    await t.step({
-      name: "log_name_01",
-      fn: () =>
-        assertLog(
-          LogLevel.Debug,
-          "ExampleTest",
-          "log test",
-          {},
-          'D example_test "log test" {}',
-        ),
-    });
-    await t.step({
-      name: "log_name_02",
-      fn: () =>
-        assertLog(
-          LogLevel.Debug,
-          "a-b-c",
-          "log test",
-          {},
-          'D a_b_c "log test" {}',
+          'C "log test" {}',
         ),
     });
     await t.step({
       name: "log_message_00",
-      fn: () =>
-        assertLog(LogLevel.Debug, "test", "a b c", {}, 'D test "a b c" {}'),
+      fn: () => assertLog(LogLevel.Debug, "a b c", {}, 'D "a b c" {}'),
     });
     await t.step({
       name: "log_message_00",
-      fn: () =>
-        assertLog(LogLevel.Debug, "test", 'a"b"c', {}, "D test \"a'b'c\" {}"),
+      fn: () => assertLog(LogLevel.Debug, 'a"b"c', {}, "D \"a'b'c\" {}"),
     });
     await t.step({
       name: "log_data_00",
@@ -169,9 +126,8 @@ Deno.test({
         assertLog(
           LogLevel.Debug,
           "test",
-          "test",
           { a: 1 },
-          'D test "test" {"a":1}',
+          'D "test" {"a":1}',
         ),
     });
     await t.step({
@@ -179,10 +135,9 @@ Deno.test({
       fn: () =>
         assertError(
           "test",
-          "test",
           new Error("test"),
           {},
-          'E test "test" {"error":{"name":"Error","message":"test","stack":"<stack>"}}',
+          'E "test" {"error":{"name":"Error","message":"test","stack":"<stack>"}}',
         ),
     });
   },
