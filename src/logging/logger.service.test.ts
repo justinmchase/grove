@@ -51,17 +51,6 @@ Deno.test({
     const logger = new ConsoleLogger();
     const assertLog = logAsserter(logger);
     const assertError = logErrorAsserter(logger);
-
-    await t.step({
-      name: "log_level_00",
-      fn: () =>
-        assertLog(
-          LogLevel.Trace,
-          "log test",
-          {},
-          'T "log test" {}',
-        ),
-    });
     await t.step({
       name: "log_level_01",
       fn: () =>
@@ -140,5 +129,6 @@ Deno.test({
           'E "test" {"error":{"name":"Error","message":"test","stack":"<stack>"}}',
         ),
     });
+    
   },
 });

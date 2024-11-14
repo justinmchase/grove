@@ -1,5 +1,4 @@
 import {
-  bgBlue,
   bgRed,
   blue,
   brightBlack,
@@ -13,8 +12,8 @@ import { BaseLogger } from "./base.logger.ts";
 
 export class ConsoleLogger extends BaseLogger {
   private readonly isTTY: boolean;
-  constructor() {
-    super();
+  constructor(logLevel: LogLevel = LogLevel.Info) {
+    super(logLevel);
     this.isTTY = Deno.stdout.isTerminal();
   }
   public async log(
@@ -27,8 +26,6 @@ export class ConsoleLogger extends BaseLogger {
     const l = (() => {
       if (this.isTTY) {
         switch (level) {
-          case LogLevel.Trace:
-            return bgBlue(level);
           case LogLevel.Debug:
             return blue(level);
           case LogLevel.Info:

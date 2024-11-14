@@ -6,10 +6,6 @@ export type Logger = {
     message: string,
     data?: Record<keyof unknown, unknown>,
   ): Promise<void>;
-  trace(
-    message: string,
-    data?: Record<keyof unknown, unknown>,
-  ): Promise<void>;
   debug(
     message: string,
     data?: Record<keyof unknown, unknown>,
