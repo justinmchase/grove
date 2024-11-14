@@ -129,6 +129,5 @@ Deno.test({
           'E "test" {"error":{"name":"Error","message":"test","stack":"<stack>"}}',
         ),
     });
-
   },
 });
