@@ -9,7 +9,7 @@
     "./modes": "./src/modes/mod.ts",
     "./services": "./src/services/mod.ts",
     "./util": "./src/util/mod.ts",
-    "./deps": "./deps/mod.ts"
+    "./deps": "./src/deps/mod.ts"
   },
   "tasks": {
     "check": "deno fmt && deno lint && deno test && npx jsr publish --dry-run --allow-dirty",

@@ -1,5 +1,3 @@
-export * as oak from "../deps/oak.ts";
-
 export * from "./context.ts";
 export * from "./grove.ts";
 
