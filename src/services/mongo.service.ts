@@ -24,26 +24,14 @@ export class MongoService {
   }
 
   public static async create(
-    logging: Logger,
+    logger: Logger,
     config: IMongoConfig,
   ): Promise<MongoService> {
     const { mongoConnectionString } = config;
-    if (!mongoConnectionString) {
-      logging.warn(
-        "mongo",
-        "MONGO_CONNECTION_STRING not found. Please create a .env file or set up your environment correctly.",
-      );
-    }
-
     const client = new MongoClient();
-    // todo: this got removed in the latest version of this library, not sure if its needed anymore or not
-    // const options = await parseConnectionString(mongoConnectionString);
-    // if (mongoConnectionString.indexOf("localhost") === -1) {
-    //   options.tls = true;
-    // }
     const db = await client.connect(mongoConnectionString);
-    logging.info(
-      "mongo connected",
+    logger.info(
+      `connected to database ${db.name}`,
       { name: db.name },
     );
     return new MongoService(client, db);
