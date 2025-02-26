@@ -19,7 +19,6 @@ export class StorageService {
       metadata: { last: new Date().toISOString() },
     });
     logger.info(
-      "services.storage.connected",
       `connected to storage account ${client.accountName}`,
       { name: client.accountName },
     );

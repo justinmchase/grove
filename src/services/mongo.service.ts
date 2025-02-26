@@ -31,7 +31,6 @@ export class MongoService {
     const client = new MongoClient();
     const db = await client.connect(mongoConnectionString);
     logger.info(
-      "services.mongo.connected",
       `connected to database ${db.name}`,
       { name: db.name },
     );
