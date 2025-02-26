@@ -2,7 +2,6 @@ import { Status } from "@oak/oak";
 import { Controller } from "./controller.ts";
 import type { Application, Context } from "@oak/oak";
 import type { IContext, IState } from "../context.ts";
-import { ApplicationError } from "../errors/application.error.ts";
 
 export class ErrorController<
   TContext extends IContext,
@@ -27,10 +26,11 @@ export class ErrorController<
       const { message } = err instanceof Error
         ? err
         : { message: "An unknown error occurred" };
-      const { status = Status.InternalServerError, code, warning } = err as unknown as Record<
-        string,
-        unknown
-      >;
+      const { status = Status.InternalServerError, code, warning } =
+        err as unknown as Record<
+          string,
+          unknown
+        >;
       const { request: { ip, method, url } } = ctx;
       ctx.response.status = status as Status;
       ctx.response.body = { ok: false, status, message, code, warning };
