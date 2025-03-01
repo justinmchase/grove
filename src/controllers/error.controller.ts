@@ -26,14 +26,14 @@ export class ErrorController<
       const { message } = err instanceof Error
         ? err
         : { message: "An unknown error occurred" };
-      const { status = Status.InternalServerError, code, warning } =
+      const { status = Status.InternalServerError, code, reason } =
         err as unknown as Record<
           string,
           unknown
         >;
       const { request: { ip, method, url } } = ctx;
       ctx.response.status = status as Status;
-      ctx.response.body = { ok: false, status, message, code, warning };
+      ctx.response.body = { ok: false, status, message, code, reason };
       ctx.response.headers.set("Content-Type", "application/json");
       ctx.state.context.logger.error(
         `An unhandled error occurred: ${message}`,
