@@ -6,7 +6,7 @@ export class ApplicationError extends Error {
     public readonly status: Status,
     public readonly code: ErrorCode,
     message: string,
-    public readonly warning?: string,
+    public readonly reason?: string,
     options?: ErrorOptions,
   ) {
     super(message, options);
