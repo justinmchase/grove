@@ -34,7 +34,7 @@ export abstract class GithubWebhookController<
       this.githubWebhookPath,
       async (context, _next) =>
         await this.handler(
-          context.state.context.log,
+          context.state.context.logger,
           context.request,
           context.response,
         ),
@@ -44,7 +44,7 @@ export abstract class GithubWebhookController<
     await undefined;
   }
 
-  private async handler(log: Logger, req: Request, res: Response) {
+  private async handler(logger: Logger, req: Request, res: Response) {
     const githubEvent = req.headers.get("X-GitHub-Event") as
       | GitHubEventName
       | "ping"
@@ -54,7 +54,7 @@ export abstract class GithubWebhookController<
       | GitHubEvent
       | GitHubDeploymentProtectionRuleEvent;
     const { action, sender, repository } = event;
-    log.info(
+    logger.info(
       `github webhook event ${githubEvent}`,
       {
         githubEvent,
@@ -67,31 +67,35 @@ export abstract class GithubWebhookController<
 
     switch (githubEvent) {
       case "ping":
-        return await this.handlePingEvent(log, res, event as GitHubPingEvent);
+        return await this.handlePingEvent(
+          logger,
+          res,
+          event as GitHubPingEvent,
+        );
       case "installation":
         return await this.handleInstallationEvent(
-          log,
+          logger,
           res,
           event as GitHubInstallationEvent,
         );
       case "deployment_protection_rule":
         return await this.handleDeploymentProtectionRuleEvent(
-          log,
+          logger,
           res,
           event as GitHubDeploymentProtectionRuleEvent,
         );
       default:
-        return await this.unsupportedEvent(log, githubEvent, res, event);
+        return await this.unsupportedEvent(logger, githubEvent, res, event);
     }
   }
 
   protected async unsupportedEvent(
-    log: Logger,
+    logger: Logger,
     githubEvent: string | null,
     res: Response,
     body: unknown,
   ) {
-    log.warn(
+    logger.warn(
       `The github webhook event ${githubEvent} was recieved but is not supported`,
       { body },
     );
@@ -103,11 +107,11 @@ export abstract class GithubWebhookController<
   }
 
   protected async handlePingEvent(
-    log: Logger,
+    logger: Logger,
     res: Response,
     event: GitHubPingEvent,
   ) {
-    log.debug(`A ping event was received`, { event });
+    logger.debug(`A ping event was received`, { event });
     res.status = Status.OK;
     res.body = {
       ok: true,
@@ -116,13 +120,13 @@ export abstract class GithubWebhookController<
   }
 
   protected async handleInstallationEvent(
-    log: Logger,
+    logger: Logger,
     res: Response,
     event: GitHubInstallationEvent,
   ) {
     const { action, installation: { id, app_slug, account: { login } } } =
       event;
-    log.debug(
+    logger.debug(
       `${app_slug} installation ${id} ${action} for ${login}`,
       {
         action,
@@ -139,7 +143,7 @@ export abstract class GithubWebhookController<
   }
 
   protected async handleDeploymentProtectionRuleEvent(
-    log: Logger,
+    logger: Logger,
     res: Response,
     event: GitHubDeploymentProtectionRuleEvent,
   ) {
@@ -152,7 +156,7 @@ export abstract class GithubWebhookController<
       repository: { id: repositoryId, full_name },
       sender: { id: senderId, login },
     } = event;
-    log.debug(
+    logger.debug(
       `deployment protection rule ${action} for ${deploymentId}:${full_name}/${environment} by ${senderId}:${login}`,
       {
         action,

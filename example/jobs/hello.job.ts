@@ -41,6 +41,6 @@ export class HelloJob<TContext extends JobContext> implements IJob<TContext> {
       name,
       punctuation,
     });
-    context.log.info("hello", hello.greeting, { _id: hello._id });
+    context.logger.info(hello.greeting, { _id: hello._id });
   }
 }

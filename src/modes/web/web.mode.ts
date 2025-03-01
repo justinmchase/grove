@@ -59,7 +59,7 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
 
   public async run(args: WebArgs, context: TContext) {
     const { port, hostname } = args;
-    context.log.info(`Server starting...`, { port });
+    context.logger.info(`Server starting...`, { port });
     const app = new Application<TState>();
     app.use(async (ctx, next) => {
       ctx.state.context = context;
@@ -67,7 +67,7 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
     });
     await this.config.initControllers(context, app);
     app.addEventListener("listen", (_event) => {
-      context.log.info(
+      context.logger.info(
         `Listening on http://${hostname}:${port}`,
         { port },
       );
@@ -77,7 +77,7 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
       const { accepts, hasBody, headers, ips, method, url } =
         err.context?.request ||
         {} as Request;
-      context.log.error(
+      context.logger.error(
         `unexpected server error: ${err.message}`,
         {
           timeStamp,
