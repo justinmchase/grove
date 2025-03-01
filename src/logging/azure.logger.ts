@@ -34,7 +34,7 @@ export class AzureLogger extends BaseLogger {
   public async log(
     level: LogLevel,
     message: string,
-    data: Serializable,
+    data: Record<keyof unknown, unknown>,
   ) {
     const m = JSON.stringify(message.replace(/"/g, "'"));
     const d = JSON.stringify(toSerializable(data));
