@@ -46,7 +46,7 @@ export class JobMode<TContext extends IJobContext> implements IMode<TContext> {
     try {
       await job.run(args, context);
     } catch (err) {
-      context.log.error("job mode error", err, { name });
+      context.logger.error("job mode error", err, { name });
     }
   }
 }

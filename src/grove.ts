@@ -95,7 +95,7 @@ export class Grove<TContext extends IContext> {
       });
 
     if (!this.config.modes.length) {
-      context.log.critical(
+      context.logger.critical(
         "grove_modes_empty",
         "At least one mode must be configured",
       );
@@ -107,7 +107,7 @@ export class Grove<TContext extends IContext> {
       // Cliffy supports default commands but it doesn't seem to work so for now we will hack it for now
       // todo: use after https://github.com/c4spar/deno-cliffy/issues/655 is resolved
       const defaultMode = this.config.modes[0].name;
-      context.log.info(
+      context.logger.info(
         `no mode specified, using default mode ${defaultMode}`,
         { mode: defaultMode, args },
       );
@@ -115,7 +115,7 @@ export class Grove<TContext extends IContext> {
     }
     await command
       .error((err) =>
-        context.log.error(
+        context.logger.error(
           "grove_parse_error",
           "Command line args were unable to be parsed",
           err,
@@ -132,14 +132,14 @@ export class Grove<TContext extends IContext> {
 
   private async run(args: unknown, context: TContext, mode: IMode<TContext>) {
     const { name } = mode;
-    context.log.info(`grove running mode ${name}`, {
+    context.logger.info(`grove running mode ${name}`, {
       mode: name,
       args,
     });
     try {
       await mode.run(args, context);
     } catch (err) {
-      context.log.error("grove error", err, {
+      context.logger.error("grove error", err, {
         mode: mode.name,
         args,
       });

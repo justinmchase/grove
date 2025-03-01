@@ -2,7 +2,7 @@ import type { State } from "@oak/oak";
 import type { Logger } from "./logging/mod.ts";
 
 export interface IContext {
-  log: Logger;
+  logger: Logger;
 }
 
 export interface IState<
