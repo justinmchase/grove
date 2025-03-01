@@ -38,7 +38,7 @@ export class GitHubService {
     );
     const credentialProvider = credentials(config);
     const secret = githubWebhookSecret
-      ? await hmacCreateKey(githubWebhookSecret)
+      ? await hmacCreateKey({ secret: githubWebhookSecret })
       : undefined;
     return new GitHubService(
       credentialProvider,
