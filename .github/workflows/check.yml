@@ -19,3 +19,4 @@ jobs:
       - run: deno cache deps/mod.ts
       - run: deno test
       - run: npx jsr publish --dry-run
+      - run: deno run example:job:hello

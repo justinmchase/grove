@@ -17,7 +17,7 @@ export class HelloController implements Controller<Context, State> {
       "/hello",
       async (context, _next) =>
         await this.handler(
-          context.state.context.log,
+          context.state.context.logger,
           context.request,
           context.response,
         ),
