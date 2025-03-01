@@ -10,14 +10,14 @@ type AzureLoggerParams = {
   azureAnalyticsWorkspaceId: string;
   azureAnalyticsWorkspaceSecret: string;
   azureAnalyticsLogType?: string;
-}
+};
 
 export class AzureLogger extends BaseLogger {
   constructor(
     private readonly workspaceId: string,
     private readonly cryptoKey: CryptoKey,
     private readonly logType: string,
-    private readonly meta?: Serializable
+    private readonly meta?: Serializable,
   ) {
     super();
   }
@@ -26,9 +26,18 @@ export class AzureLogger extends BaseLogger {
     params: AzureLoggerParams,
     meta?: Serializable,
   ): Promise<AzureLogger> {
-    const { azureAnalyticsWorkspaceId, azureAnalyticsWorkspaceSecret, azureAnalyticsLogType = "Grove" } = params;
+    const {
+      azureAnalyticsWorkspaceId,
+      azureAnalyticsWorkspaceSecret,
+      azureAnalyticsLogType = "Grove",
+    } = params;
     const key = await hmacCreateKey(azureAnalyticsWorkspaceSecret);
-    return new AzureLogger(azureAnalyticsWorkspaceId, key, azureAnalyticsLogType, meta);
+    return new AzureLogger(
+      azureAnalyticsWorkspaceId,
+      key,
+      azureAnalyticsLogType,
+      meta,
+    );
   }
 
   public async log(
