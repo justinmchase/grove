@@ -4,9 +4,9 @@ import type { Logger } from "./logger.interface.ts";
 
 export class AggregateLogger extends BaseLogger {
   private readonly loggers: Logger[];
-  constructor(...loggers: Logger[]) {
+  constructor(loggers: Logger[]) {
     super();
-    this.loggers = [...loggers];
+    this.loggers = loggers;
   }
   public async log(
     level: LogLevel,

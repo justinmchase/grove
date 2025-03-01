@@ -12,8 +12,8 @@ import { BaseLogger } from "./base.logger.ts";
 
 export class ConsoleLogger extends BaseLogger {
   private readonly isTTY: boolean;
-  constructor(logLevel: LogLevel = LogLevel.Info) {
-    super(logLevel);
+  constructor() {
+    super();
     this.isTTY = Deno.stdout.isTerminal();
   }
   public async log(
