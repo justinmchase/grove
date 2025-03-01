@@ -1,11 +1,16 @@
 import { hexToUint8 } from "./hex.ts";
 
+type HmacParams = {
+  secret?: string;
+  keyData?: BufferSource;
+};
 /*
  * Creates an hmac CryptoKey for signing and verifycation of hmac hashes.
- * @param secret must be a base64 encoded secret key value
+ * @param params must contain either a secret string or the raw keyData
  */
-export async function hmacCreateKey(secret: string): Promise<CryptoKey> {
-  const key = new TextEncoder().encode(secret);
+export async function hmacCreateKey(params: HmacParams): Promise<CryptoKey> {
+  const { secret } = params;
+  const key = params.keyData ?? new TextEncoder().encode(secret);
   return await crypto.subtle.importKey(
     "raw",
     key,
