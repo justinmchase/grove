@@ -1,32 +1,43 @@
 import { encodeBase64 } from "@std/encoding/base64";
-import { toSerializable } from "@justinmchase/serializable";
+import { type Serializable, toSerializable } from "@justinmchase/serializable";
 import { Status } from "@oak/oak";
 import { BaseLogger } from "./base.logger.ts";
 import { UnexpectedStatusError } from "../errors/mod.ts";
-import { readOptionalString, readRequiredString } from "../util/config.ts";
 import { hmacCreateKey, hmacSign } from "../util/hmac.ts";
 import type { LogLevel } from "./logLevel.ts";
+
+type AzureLoggerParams = {
+  azureAnalyticsWorkspaceId: string;
+  azureAnalyticsWorkspaceSecret: string;
+  azureAnalyticsLogType?: string;
+};
 
 export class AzureLogger extends BaseLogger {
   constructor(
     private readonly workspaceId: string,
     private readonly cryptoKey: CryptoKey,
     private readonly logType: string,
-    private readonly meta: Record<string, string> = {},
+    private readonly meta?: Serializable,
   ) {
     super();
   }
 
   public static async create(
-    env: Record<string, string>,
-    meta?: Record<string, string>,
+    params: AzureLoggerParams,
+    meta?: Serializable,
   ): Promise<AzureLogger> {
-    const workspaceId = readRequiredString(env, "AZURE_ANALYTICS_WORKSPACE_ID");
-    const secret = readRequiredString(env, "AZURE_ANALYTICS_WORKSPACE_SECRET");
-    const logType = readOptionalString(env, "AZURE_ANALYTICS_LOGTYPE") ??
-      "Grove";
-    const key = await hmacCreateKey(secret);
-    return new AzureLogger(workspaceId, key, logType, meta);
+    const {
+      azureAnalyticsWorkspaceId,
+      azureAnalyticsWorkspaceSecret,
+      azureAnalyticsLogType = "Grove",
+    } = params;
+    const key = await hmacCreateKey(azureAnalyticsWorkspaceSecret);
+    return new AzureLogger(
+      azureAnalyticsWorkspaceId,
+      key,
+      azureAnalyticsLogType,
+      meta,
+    );
   }
 
   public async log(
