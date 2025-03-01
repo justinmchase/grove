@@ -1,6 +1,6 @@
 {
   "name": "@justinmchase/grove",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "exports": {
     ".": "./mod.ts",
     "./controllers": "./src/controllers/mod.ts",
