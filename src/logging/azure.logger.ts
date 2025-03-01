@@ -12,19 +12,21 @@ export class AzureLogger extends BaseLogger {
     private readonly workspaceId: string,
     private readonly cryptoKey: CryptoKey,
     private readonly logType: string,
+    private readonly meta: Record<string, string> = {},
   ) {
     super();
   }
 
   public static async create(
     env: Record<string, string>,
+    meta?: Record<string, string>,
   ): Promise<AzureLogger> {
     const workspaceId = readRequiredString(env, "AZURE_ANALYTICS_WORKSPACE_ID");
     const secret = readRequiredString(env, "AZURE_ANALYTICS_WORKSPACE_SECRET");
     const logType = readOptionalString(env, "AZURE_ANALYTICS_LOGTYPE") ??
       "Grove";
     const key = await hmacCreateKey(secret);
-    return new AzureLogger(workspaceId, key, logType);
+    return new AzureLogger(workspaceId, key, logType, meta);
   }
 
   public async log(
@@ -35,10 +37,12 @@ export class AzureLogger extends BaseLogger {
     const m = JSON.stringify(message.replace(/"/g, "'"));
     const d = JSON.stringify(toSerializable(data));
     const line = `${level} ${m} ${d}`;
+    const meta = this.meta;
     const json = JSON.stringify([{
       level,
       message: m,
       data: d,
+      meta,
       line,
     }]);
     const content = new TextEncoder().encode(json);

@@ -34,7 +34,7 @@ export class ErrorController<
       ctx.response.status = status as Status;
       ctx.response.body = { ok: false, message };
       ctx.response.headers.set("Content-Type", "application/json");
-      ctx.state.context.log.error(
+      ctx.state.context.logger.error(
         `An unhandled error occurred: ${message}`,
         err,
         {

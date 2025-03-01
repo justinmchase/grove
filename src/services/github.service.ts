@@ -22,12 +22,12 @@ export class GitHubService {
   }
 
   public static async create(
-    log: Logger,
+    logger: Logger,
     config: GitHubConfig,
   ): Promise<GitHubService> {
     const { githubAppId, githubPrivateKey, githubPat, githubWebhookSecret } =
       config;
-    log.debug(
+    logger.debug(
       "github service initializing",
       {
         githubAppId,

@@ -65,7 +65,7 @@ Deno.test({
   fn: failure(async () => {
     const grove = new Grove({
       initContext: async () => {
-        return await { log: new MemoryLogger() };
+        return await { logger: new MemoryLogger() };
       },
       modes: [],
     });
@@ -79,7 +79,7 @@ Deno.test({
     const testMode = new TestMode("test");
     const grove = new Grove({
       initContext: async () => {
-        return await { log: new MemoryLogger() };
+        return await { logger: new MemoryLogger() };
       },
       modes: [
         testMode,
@@ -100,7 +100,7 @@ Deno.test({
     }]);
     const grove = new Grove({
       initContext: async () => {
-        return await { log: new MemoryLogger() };
+        return await { logger: new MemoryLogger() };
       },
       modes: [
         testMode,
@@ -118,7 +118,7 @@ Deno.test({
     const testMode = new TestMode("test");
     const grove = new Grove({
       initContext: async () => {
-        return await { log: new MemoryLogger() };
+        return await { logger: new MemoryLogger() };
       },
       modes: [
         new TestMode("a"),
@@ -138,7 +138,7 @@ Deno.test({
     const testMode = new TestMode("test", [], [subMode]);
     const grove = new Grove({
       initContext: async () => {
-        return await { log: new MemoryLogger() };
+        return await { logger: new MemoryLogger() };
       },
       modes: [
         new TestMode("a"),
@@ -159,7 +159,7 @@ Deno.test({
     const testMode = new TestMode("test", [], [subMode]);
     const grove = new Grove({
       initContext: async () => {
-        return await { log: new MemoryLogger() };
+        return await { logger: new MemoryLogger() };
       },
       modes: [
         new TestMode("a"),
@@ -184,7 +184,7 @@ Deno.test({
     const testMode = new TestMode("test", [], [subMode]);
     const grove = new Grove({
       initContext: async () => {
-        return await { log: new MemoryLogger() };
+        return await { logger: new MemoryLogger() };
       },
       modes: [
         new TestMode("a"),
