@@ -42,7 +42,7 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
         type: Type.Number,
         name: "port",
         description: "The port to listen on",
-        defaultValue: this.config.port ?? 8080,
+        defaultValue: this.config.port ?? 8000,
       },
       {
         type: Type.String,
