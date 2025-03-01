@@ -2,9 +2,7 @@ import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 export class EmptyError extends ApplicationError {
-  constructor(
-    public readonly reason: string,
-  ) {
+  constructor(reason: string) {
     super(
       Status.BadRequest,
       "E_EMPTY",
