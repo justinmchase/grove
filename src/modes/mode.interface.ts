@@ -15,7 +15,7 @@ export interface IModeOption {
 
 /**
  * A grove application exports one or more IModes. Each mode is a command that can be executed.
- * The hybrid nature of Grove allows for different aspects of the application to all exist in 
+ * The hybrid nature of Grove allows for different aspects of the application to all exist in
  * the same codebase but as different modes. Each process only runs a single mode at a time.
  *
  * Therefore, you implement multiple modes and then run the service in different multiple
