@@ -1,6 +1,10 @@
 import { load } from "@std/dotenv";
 import { ConfigError } from "../errors/config.error.ts";
 
+/**
+ * Utilizies the `dotenv` module to load environment variables from a `.env` file.
+ * @returns The combined environment variables from the `.env` file and the system environment.
+ */
 export async function getEnv(): Promise<Record<string, string>> {
   return {
     ...await load(),
@@ -8,6 +12,12 @@ export async function getEnv(): Promise<Record<string, string>> {
   };
 }
 
+/**
+ * Reads an optional string from the environment variables.
+ * @param env The environment variables.
+ * @param key The key to read.
+ * @returns The value of the key or undefined if not found.
+ */
 export function readOptionalString(
   env: Record<string, string>,
   key: string,
@@ -15,6 +25,13 @@ export function readOptionalString(
   return env[key];
 }
 
+/**
+ * Reads a required string from the environment variables.
+ * @param env The environment variables.
+ * @param key The key to read.
+ * @throws ConfigError if the key is not found.
+ * @returns The value of the key.
+ */
 export function readRequiredString(
   env: Record<string, string>,
   key: string,
@@ -25,6 +42,13 @@ export function readRequiredString(
   return env[key];
 }
 
+/**
+ * Reads an optional integer from the environment variables.
+ * @param env The environment variables.
+ * @param key The key to read.
+ * @throws ConfigError if the value is not a valid integer.
+ * @returns The number value of the key or undefined if not found.
+ */
 export function readOptionalInt(
   env: Record<string, string>,
   key: string,

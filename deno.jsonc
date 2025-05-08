@@ -1,6 +1,7 @@
 {
   "name": "@justinmchase/grove",
   "version": "0.6.9",
+  "license": "MIT",
   "exports": {
     ".": "./mod.ts",
     "./controllers": "./src/controllers/mod.ts",
@@ -34,5 +35,5 @@
     "@std/fmt": "jsr:@std/fmt@^1.0.7",
     "@std/testing": "jsr:@std/testing@^1.0.11",
     "@wok/case": "jsr:@wok/case@^1.0.2"
-  }
+  },
 }

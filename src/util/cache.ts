@@ -1,3 +1,6 @@
+/**
+ * A simple in-memory cache implementation.
+ */
 export class MemoryCache {
   private cache: Map<string, { value: unknown; timeout: number }> = new Map();
 
