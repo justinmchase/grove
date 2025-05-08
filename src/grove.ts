@@ -8,11 +8,26 @@ type InitApplicationContext<
   TContext extends IContext,
 > = () => Promise<TContext>;
 
+/**
+ * GroveConfig is the configuration object for the Grove class.
+ */
 export interface IGroveConfig<TContext extends IContext> {
+  /**
+   * The function that will be called to initialize the application context.
+   * This function should return a promise that resolves to the application context.
+   */
   initContext: InitApplicationContext<TContext>;
+  /**
+   * The modes that will be available in the CLI.
+   * Each mode is a command that can be executed.
+   */
   modes: IMode<TContext>[];
 }
 
+/**
+ * Grove is the main class that will be used to create the CLI.
+ * It will use the configuration object to create the CLI commands and options.
+ */
 export class Grove<TContext extends IContext> {
   constructor(
     private readonly config: IGroveConfig<TContext>,
@@ -73,6 +88,11 @@ export class Grove<TContext extends IContext> {
     return command;
   }
 
+  /**
+   * The start function is the main entry point for the CLI.
+   * It will initialize the application context and parse the command line arguments.
+   * @param args The command line arguments.
+   */
   public async start(args: string[]) {
     const context = await this.config.initContext();
     const command = new Command()

@@ -1,6 +1,7 @@
 {
   "name": "@justinmchase/grove",
   "version": "0.6.9",
+  "license": "MIT",
   "exports": {
     ".": "./mod.ts",
     "./controllers": "./src/controllers/mod.ts",

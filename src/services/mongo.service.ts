@@ -6,6 +6,9 @@ export interface IMongoConfig {
   mongoConnectionString: string;
 }
 
+/**
+ * MongoService is a service that provides access to a MongoDB database.
+ */
 export class MongoService {
   constructor(
     private readonly client: MongoClient,
@@ -13,16 +16,30 @@ export class MongoService {
   ) {
   }
 
+  /**
+   * Gets a collection from the database.
+   * @param name The name of the collection to access.
+   * @returns A collection object that can be used to perform operations on the collection.
+   */
   public collection<T extends Document = Document>(
     name: string,
   ): Collection<T> {
     return this.db.collection<T>(name);
   }
 
+  /**
+   * Closes the connection to the database.
+   */
   public close() {
     this.client.close();
   }
 
+  /**
+   * Creates a new instance of the MongoService asynchronously.
+   * @param logger The logger to use for logging.
+   * @param config The configuration object containing the MongoDB connection string.
+   * @returns A new instance of the MongoService.
+   */
   public static async create(
     logger: Logger,
     config: IMongoConfig,
