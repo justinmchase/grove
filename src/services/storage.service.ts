@@ -1,4 +1,8 @@
-import { SASProtocol, BlobSASPermissions, BlobServiceClient } from "@azure/storage-blob";
+import {
+  BlobSASPermissions,
+  BlobServiceClient,
+  SASProtocol,
+} from "@azure/storage-blob";
 import type { Logger } from "../logging/mod.ts";
 import type { Buffer } from "node:buffer";
 
@@ -99,14 +103,17 @@ export class StorageService {
     const blockClient = await blobClient.getBlockBlobClient();
     return await blockClient.downloadToBuffer();
   }
-  
+
   /**
    * Get a stream containing the contents of a blob.
    * @param container The name of the container the blob is in.
    * @param blob The name of the blob to read.
    * @returns The contents of the blob as a stream.
    */
-  public async getBlobStream(container: string, blob: string): Promise<NodeJS.ReadableStream> {
+  public async getBlobStream(
+    container: string,
+    blob: string,
+  ): Promise<NodeJS.ReadableStream> {
     const containerClient = this.client.getContainerClient(container);
     const blobClient = containerClient.getBlobClient(blob);
     const blockClient = await blobClient.getBlockBlobClient();
@@ -121,7 +128,12 @@ export class StorageService {
    * @param data The data to upload as the contents of the blob.
    * @param contentType The content type of the blob.
    */
-  public async putBlob(container: string, blob: string, data: BufferSource, contentType: string) {
+  public async putBlob(
+    container: string,
+    blob: string,
+    data: BufferSource,
+    contentType: string,
+  ) {
     const containerClient = this.client.getContainerClient(container);
     await containerClient.createIfNotExists();
 
@@ -129,7 +141,7 @@ export class StorageService {
     const blockClient = await blobClient.getBlockBlobClient();
     await blockClient.uploadData(data, {
       blobHTTPHeaders: {
-        blobContentType: contentType
+        blobContentType: contentType,
       },
     });
   }
