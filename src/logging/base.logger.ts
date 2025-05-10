@@ -1,6 +1,11 @@
 import { LogLevel } from "./logLevel.ts";
 import type { Logger } from "./logger.interface.ts";
 
+/**
+ * BaseLogger is an abstract class that implements the Logger interface.
+ * It provides default implementations for the log, debug, info, warn, error, and critical methods.
+ * Subclasses must implement the log method to provide their own logging functionality.
+ */
 export abstract class BaseLogger implements Logger {
   public abstract log(
     level: LogLevel,

@@ -22,10 +22,27 @@ export interface IModeOption {
  * processes, each running a different mode.
  */
 export interface IMode<TContext extends IContext> {
+  /**
+   * The name of the mode. This is the name that will be used to determine which mode to run.
+   */
   name: string;
+  /**
+   * The description of the mode. This is the description that will be shown in the help message.
+   */
   description: string;
+  /**
+   * The options that will be used to run the mode. This is the list of options that will be
+   * available to the user when running the mode.
+   */
   getOptions(): IModeOption[];
+  /**
+   * The sub modes that will be available in the mode. This is the list of sub modes that will
+   * be available to the user when running the mode.
+   */
   getModes(): IMode<TContext>[];
-
+  /**
+   * The function that will be called to run the mode.
+   * This function should return a promise that resolves when the mode is done.
+   */
   run(args: unknown, context: TContext): Promise<void>;
 }

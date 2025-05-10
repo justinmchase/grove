@@ -12,6 +12,9 @@ type AzureLoggerParams = {
   azureAnalyticsLogType?: string;
 };
 
+/**
+ * AzureLogger is a logger that sends logs to Azure Log Analytics.
+ */
 export class AzureLogger extends BaseLogger {
   constructor(
     private readonly workspaceId: string,
@@ -22,6 +25,12 @@ export class AzureLogger extends BaseLogger {
     super();
   }
 
+  /**
+   * Asynchronously creates a new AzureLogger instance.
+   * @param params - The parameters for the logger.
+   * @param meta - Optional metadata to include with each log entry.
+   * @returns A promise that resolves to a new AzureLogger instance.
+   */
   public static async create(
     params: AzureLoggerParams,
     meta?: Serializable,
@@ -41,6 +50,12 @@ export class AzureLogger extends BaseLogger {
     );
   }
 
+  /**
+   * Logs a message to Azure Log Analytics.
+   * @param level - The log level.
+   * @param message - The log message.
+   * @param data - Additional data to include with the log entry.
+   */
   public async log(
     level: LogLevel,
     message: string,
