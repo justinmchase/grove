@@ -2,10 +2,15 @@
   "name": "@justinmchase/grove",
   "version": "0.6.13",
   "license": "MIT",
-  "files": [
-    "mod.ts",
-    "src/**/*"
-  ],
+  "publish": {
+    "include": [
+      "LICENSE",
+      "VERSION",
+      "README.md",
+      "mod.ts",
+      "src/**/*"
+    ]
+  },
   "exports": {
     ".": "./mod.ts",
     "./controllers": "./src/controllers/mod.ts",
