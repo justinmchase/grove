@@ -1,6 +1,6 @@
 {
   "name": "@justinmchase/grove",
-  "version": "0.6.12",
+  "version": "0.6.13",
   "license": "MIT",
   "files": [
     "mod.ts",
