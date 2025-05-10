@@ -9,6 +9,12 @@ type WebArgs = {
   hostname?: string;
 };
 
+/**
+ * IWebModeConfig is the interface that will be used to create the web mode.
+ * This mode will run a webserver until closed.
+ * @template TContext - The type of the context.
+ * @template TState - The type of the state.
+ */
 export interface IWebModeConfig<
   TContext extends IContext,
   TState extends IState<TContext>,
@@ -26,6 +32,12 @@ type InitControllers<
   app: Application<TState>,
 ) => Promise<void>;
 
+/**
+ * WebMode is the class that will be used to create the web mode.
+ * This mode will run a webserver until closed.
+ * @template TContext - The type of the context.
+ * @template TState - The type of the state.
+ */
 export class WebMode<TContext extends IContext, TState extends IState<TContext>>
   implements IMode<TContext> {
   public name = "web";
@@ -36,6 +48,11 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
   ) {
   }
 
+  /**
+   * The options that will be used to run the mode. This is the list of options that will be
+   * available to the user when running the mode.
+   * @returns {IModeOption[]} port and hostname options
+   */
   public getOptions(): IModeOption[] {
     return [
       {
@@ -53,10 +70,21 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
     ];
   }
 
+  /**
+   * The sub modes that will be available in the mode. This is the list of sub modes that will be
+   * available to the user when running the mode.
+   * @returns {IMode<TContext>[]} empty array
+   */
   public getModes(): IMode<TContext>[] {
     return [];
   }
 
+  /**
+   * The function that will be called to run the mode.
+   * The mode will run a webserver until closed.
+   * @param {WebArgs} args - The arguments that will be passed to the mode.
+   * @param {TContext} context - The context that will be passed to the mode.
+   */
   public async run(args: WebArgs, context: TContext) {
     const { port, hostname } = args;
     context.logger.info(`Server starting...`, { port });

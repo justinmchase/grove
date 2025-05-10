@@ -10,6 +10,10 @@ import { toSerializable } from "@justinmchase/serializable";
 import { LogLevel } from "./logLevel.ts";
 import { BaseLogger } from "./base.logger.ts";
 
+/**
+ * ConsoleLogger is a logger that logs messages to the console.
+ * It formats the log messages based on the log level and whether the output is a TTY.
+ */
 export class ConsoleLogger extends BaseLogger {
   private readonly isTTY: boolean;
   constructor() {

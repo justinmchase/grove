@@ -3,6 +3,9 @@ import type { Application, Response } from "@oak/oak";
 import type { IContext, IState } from "../context.ts";
 import type { Controller } from "./controller.ts";
 
+/**
+ * A basic health check controller that responds with a 200 OK status and a JSON body at `GET /health`.
+ */
 export class HealthController<
   TContext extends IContext,
   TState extends IState<TContext>,
