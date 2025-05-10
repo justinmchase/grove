@@ -17,20 +17,33 @@ import { EmptyError } from "../errors/mod.ts";
  * StorageService is a service that provides access to Azure Blob Storage.
  */
 export class StorageService {
-  constructor(private readonly client: BlobServiceClient) {
+  constructor(
+    private readonly client: BlobServiceClient,
+    private readonly config: {
+      https: boolean;
+    },
+  ) {
   }
 
   /**
    * Creates a new instance of the StorageService asynchronously.
    * @param logger The logger to use for logging.
-   * @param args The configuration object containing the Azure Storage connection string.
+   * @param args The configuration object containing the Azure Storage configuration.
+   * @param args.azureStorageConnectionString The connection string for the Azure Storage account.
+   * @param args.azureStorageHttps Whether to use HTTPS exclusively for the connection. Recommended to only set this to false for local development.
    * @returns A new instance of the StorageService.
    */
   public static async create(
     logger: Logger,
-    args: { azureStorageConnectionString: string },
+    args: {
+      azureStorageConnectionString: string;
+      azureStorageHttps: boolean;
+    },
   ): Promise<StorageService> {
-    const { azureStorageConnectionString } = args;
+    const {
+      azureStorageConnectionString,
+      azureStorageHttps,
+    } = args;
     const client = BlobServiceClient.fromConnectionString(
       azureStorageConnectionString,
     );
@@ -42,7 +55,7 @@ export class StorageService {
       `connected to storage account ${client.accountName}`,
       { name: client.accountName },
     );
-    return new StorageService(client);
+    return new StorageService(client, { https: azureStorageHttps });
   }
 
   /**
@@ -87,7 +100,9 @@ export class StorageService {
     const tenMinutes = 10 * 60 * 1000;
     const start = new Date();
     const sasUrl = await blobClient.generateSasUrl({
-      protocol: SASProtocol.Https,
+      protocol: this.config.https
+        ? SASProtocol.Https
+        : SASProtocol.HttpsAndHttp,
       contentType: "application/octet-stream",
       permissions: BlobSASPermissions.from({
         write: true,
