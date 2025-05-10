@@ -1,6 +1,12 @@
-import { BlobSASPermissions, BlobServiceClient } from "@azure/storage-blob";
+import {
+  BlobSASPermissions,
+  BlobServiceClient,
+  SASProtocol,
+} from "@azure/storage-blob";
 import type { Logger } from "../logging/mod.ts";
-import { SASProtocol } from "@azure/storage-blob";
+import type { Buffer } from "node:buffer";
+import { NotFoundError } from "../mod.ts";
+import { EmptyError } from "../errors/mod.ts";
 
 /**
  * StorageService is a service that provides access to Azure Blob Storage.
@@ -35,6 +41,17 @@ export class StorageService {
   }
 
   /**
+   * Ensures that a container exists in Azure Blob Storage.
+   * @param container The name of the container to ensure.
+   */
+  public async ensureContainer(container: string) {
+    const containerClient = this.client.getContainerClient(container);
+    await containerClient.createIfNotExists({
+      metadata: { last: new Date().toISOString() },
+    });
+  }
+
+  /**
    * Reads a blob from Azure Blob Storage and returns its content as a string.
    * @param container The name of the container the blob is in.
    * @param blob The name of the blob to read.
@@ -59,6 +76,8 @@ export class StorageService {
    */
   public async getUploadUrl(container: string, blob: string): Promise<string> {
     const containerClient = this.client.getContainerClient(container);
+    await containerClient.createIfNotExists();
+
     const blobClient = containerClient.getBlobClient(blob);
     const tenMinutes = 10 * 60 * 1000;
     const start = new Date();
@@ -72,5 +91,79 @@ export class StorageService {
       expiresOn: new Date(start.valueOf() + tenMinutes),
     });
     return sasUrl;
+  }
+
+  /**
+   * Get a buffer containing the contents of a blob.
+   * @param container The name of the container the blob is in.
+   * @param blob The name of the blob to read.
+   * @returns The contents of the blob as a Buffer.
+   */
+  public async getBlob(container: string, blob: string): Promise<Buffer> {
+    const containerClient = this.client.getContainerClient(container);
+    const blobClient = containerClient.getBlobClient(blob);
+    const blockClient = await blobClient.getBlockBlobClient();
+    return await blockClient.downloadToBuffer();
+  }
+
+  /**
+   * Get a stream containing the contents of a blob.
+   * @param container The name of the container the blob is in.
+   * @param blob The name of the blob to read.
+   * @returns The contents of the blob as a stream.
+   */
+  public async getBlobStream(
+    container: string,
+    blob: string,
+  ): Promise<NodeJS.ReadableStream> {
+    const containerClient = this.client.getContainerClient(container);
+    const blobClient = containerClient.getBlobClient(blob);
+    const blockClient = await blobClient.getBlockBlobClient();
+    if (!await blockClient.exists()) {
+      throw new NotFoundError("Blob", `${container}/${blob}`);
+    }
+
+    const download = await blockClient.download();
+    if (!download.readableStreamBody) {
+      throw new EmptyError(`Blob body ${container}/${blob} was not found.`);
+    }
+
+    return download.readableStreamBody;
+  }
+
+  /**
+   * Uploads a BufferSource to a blob with the given content type.
+   * @param container The name of the container to upload to.
+   * @param blob The name of the blob to upload.
+   * @param data The data to upload as the contents of the blob.
+   * @param contentType The content type of the blob.
+   */
+  public async putBlob(
+    container: string,
+    blob: string,
+    data: BufferSource,
+    contentType: string,
+  ) {
+    const containerClient = this.client.getContainerClient(container);
+    await containerClient.createIfNotExists();
+
+    const blobClient = containerClient.getBlobClient(blob);
+    const blockClient = await blobClient.getBlockBlobClient();
+    await blockClient.uploadData(data, {
+      blobHTTPHeaders: {
+        blobContentType: contentType,
+      },
+    });
+  }
+
+  /**
+   * Deletes a blob from storage
+   * @param container The name of the container to delete from.
+   * @param blob The name of the blob to delete.
+   */
+  public async deleteBlob(container: string, blob: string) {
+    const containerClient = this.client.getContainerClient(container);
+    const blobClient = containerClient.getBlobClient(blob);
+    await blobClient.deleteIfExists();
   }
 }
