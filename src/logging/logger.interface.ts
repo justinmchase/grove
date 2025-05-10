@@ -1,6 +1,11 @@
 import type { LogLevel } from "./logLevel.ts";
 
 /**
+ * This module provides the logger interface for the application.
+ * @module
+ */
+
+/**
  * Logger is the interface that will be used to log messages.
  */
 export type Logger = {

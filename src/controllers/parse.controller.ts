@@ -2,6 +2,24 @@ import type { Application, Request } from "@oak/oak";
 import type { Controller } from "./controller.ts";
 import type { IContext, IState } from "../context.ts";
 
+/**
+ * This module provides the isHtml controller for the Grove framework.
+ * @module
+ */
+
+/**
+ * A controller that checks if the request is for HTML and sets the state accordingly.
+ * It sets the `isHtml` property in the state to true if the request is for HTML.
+ *
+ * The request is considered for HTML if the `accepts` header is for either
+ * `application/*` or `text/html`.
+ *
+ * This is useful for determining if the request is
+ * coming from a browser or a non-browser client.
+ * @template TContext - The type of the context.
+ * @template TState - The type of the state.
+ * @extends {Controller<TContext, TState>} - The base controller class.
+ */
 export class IsHtmlController<
   TContext extends IContext,
   TState extends IState<TContext>,

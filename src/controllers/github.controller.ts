@@ -12,10 +12,25 @@ import type { IContext, IState } from "../context.ts";
 import type { Controller } from "./controller.ts";
 import type { Logger } from "../logging/mod.ts";
 
+/**
+ * This module provides the GitHubWebhookController class, which is used to handle GitHub webhooks.
+ * It includes methods for handling different types of GitHub events.
+ * @module
+ */
+/**
+ * IGitHubWebhookConfig is the interface that will be used to create the GitHub webhook configuration.
+ * It contains the path for the GitHub webhook.
+ */
 export interface IGitHubWebhookConfig {
   githubWebhookPath: string;
 }
 
+/**
+ * GithubWebhookController is an abstract class that provides methods for handling GitHub webhooks.
+ * It extends the Controller class and implements the use method to setup routes for handling webhooks.
+ * @template TContext - The type of the context.
+ * @template TState - The type of the state.
+ */
 export abstract class GithubWebhookController<
   TContext extends IContext,
   TState extends IState<TContext>,

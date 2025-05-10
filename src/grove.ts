@@ -4,6 +4,12 @@ import { NotImplementedError } from "./errors/notimplemented.error.ts";
 import type { IContext } from "./context.ts";
 import type { IMode } from "./modes/mod.ts";
 
+/**
+ * This module contains the Grove class, which is the main entry point for the CLI.
+ * It is responsible for initializing the application context and parsing the command line arguments.
+ * @module
+ */
+
 type InitApplicationContext<
   TContext extends IContext,
 > = () => Promise<TContext>;

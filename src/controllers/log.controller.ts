@@ -2,6 +2,18 @@ import type { Application, Context } from "@oak/oak";
 import type { IContext, IState } from "../context.ts";
 import type { Controller } from "./controller.ts";
 
+/**
+ * This module provides the log controller for the Grove framework.
+ * @module
+ */
+
+/**
+ * A logging controller that logs the request and response information.
+ * It logs the status, method, URL, and time taken to process the request.
+ * @template TContext - The type of the context.
+ * @template TState - The type of the state.
+ * @extends {Controller<TContext, TState>} - The base controller class.
+ */
 export class LogController<
   TContext extends IContext,
   TState extends IState<TContext>,

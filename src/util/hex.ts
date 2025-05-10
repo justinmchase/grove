@@ -1,4 +1,9 @@
 /**
+ * This module provides a utility function to convert a hex string to a Uint8Array.
+ * @module
+ */
+
+/**
  * Converts a hex string to a Uint8Array.
  * @param hexString The hex string to convert.
  * @returns The Uint8Array representation of the hex string.

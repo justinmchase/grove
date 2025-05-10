@@ -6,6 +6,12 @@ import { MemoryCache } from "../util/cache.ts";
 import type { Request } from "@oak/oak/request";
 import type { Logger } from "../logging/mod.ts";
 
+/**
+ * This module provides the GitHubService class, which is used to interact with the GitHub API.
+ * It includes methods for creating a GitHub client, checking credentials, and verifying webhooks.
+ * @module
+ */
+
 type GitHubConfig = {
   githubAppId?: number;
   githubPrivateKey?: string;

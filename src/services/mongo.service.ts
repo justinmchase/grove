@@ -2,6 +2,11 @@ import { MongoClient } from "@db/mongo/client";
 import type { Collection, Database, Document } from "@db/mongo";
 import type { Logger } from "../../mod.ts";
 
+/**
+ * This module provides the MongoService class, which is used to interact with a MongoDB database.
+ * @module
+ */
+
 export interface IMongoConfig {
   mongoConnectionString: string;
 }

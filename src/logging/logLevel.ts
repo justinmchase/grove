@@ -1,4 +1,9 @@
 /**
+ * This module provides an enumeration for different log levels.
+ * @module
+ */
+
+/**
  * LogLevel represents the different log levels available in the application.
  */
 export enum LogLevel {

@@ -3,6 +3,11 @@ import type { LogLevel } from "./logLevel.ts";
 import type { Logger } from "./logger.interface.ts";
 
 /**
+ * This module provides the aggregate logger for the application.
+ * @module
+ */
+
+/**
  * AggregateLogger is a logger that aggregates multiple loggers.
  * It is used to log messages to multiple loggers at once.
  * @example

@@ -4,6 +4,11 @@ import type { IContext, IState } from "../context.ts";
 import type { Controller } from "./controller.ts";
 
 /**
+ * This module provides the health controller for the Grove framework.
+ * @module
+ */
+
+/**
  * A basic health check controller that responds with a 200 OK status and a JSON body at `GET /health`.
  */
 export class HealthController<

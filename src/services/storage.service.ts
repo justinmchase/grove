@@ -9,6 +9,11 @@ import { NotFoundError } from "../mod.ts";
 import { EmptyError } from "../errors/mod.ts";
 
 /**
+ * This module provides the StorageService class, which is used to interact with Azure Blob Storage.
+ * @module
+ */
+
+/**
  * StorageService is a service that provides access to Azure Blob Storage.
  */
 export class StorageService {

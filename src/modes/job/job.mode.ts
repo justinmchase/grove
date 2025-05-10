@@ -5,6 +5,11 @@ import type { IJob } from "./job.interface.ts";
 import type { IJobContext } from "./job.context.ts";
 
 /**
+ * This module provides the job mode for the application.
+ * @module
+ */
+
+/**
  * IJobModeConfig is the interface that will be used to create the job mode.
  * This mode will run a single operation then exit.
  */

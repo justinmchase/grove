@@ -2,6 +2,11 @@ import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 /**
+ * This module provides a custom error class for unexpected status errors.
+ * @module
+ */
+
+/**
  * Represents an error that occurs when an unexpected status is received.
  * @extends ApplicationError
  */

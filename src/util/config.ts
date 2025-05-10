@@ -2,6 +2,11 @@ import { load } from "@std/dotenv";
 import { ConfigError } from "../errors/config.error.ts";
 
 /**
+ * This module provides basic configuration utilities for reading and parsing environment variables.
+ * @module
+ */
+
+/**
  * Utilizies the `dotenv` module to load environment variables from a `.env` file.
  * @returns The combined environment variables from the `.env` file and the system environment.
  */
