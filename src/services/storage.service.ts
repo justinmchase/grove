@@ -5,6 +5,8 @@ import {
 } from "@azure/storage-blob";
 import type { Logger } from "../logging/mod.ts";
 import type { Buffer } from "node:buffer";
+import { NotFoundError } from "../mod.ts";
+import { EmptyError } from "../errors/mod.ts";
 
 /**
  * StorageService is a service that provides access to Azure Blob Storage.
@@ -80,7 +82,7 @@ export class StorageService {
     const tenMinutes = 10 * 60 * 1000;
     const start = new Date();
     const sasUrl = await blobClient.generateSasUrl({
-      protocol: SASProtocol.HttpsAndHttp,
+      protocol: SASProtocol.Https,
       contentType: "application/octet-stream",
       permissions: BlobSASPermissions.from({
         write: true,
@@ -117,8 +119,14 @@ export class StorageService {
     const containerClient = this.client.getContainerClient(container);
     const blobClient = containerClient.getBlobClient(blob);
     const blockClient = await blobClient.getBlockBlobClient();
+    if (!await blockClient.exists())
+      throw new NotFoundError("Blob", `${container}/${blob}`);
+
     const download = await blockClient.download();
-    return download.readableStreamBody!;
+    if (!download.readableStreamBody)
+      throw new EmptyError(`Blob body ${container}/${blob} was not found.`);
+
+    return download.readableStreamBody;
   }
 
   /**
