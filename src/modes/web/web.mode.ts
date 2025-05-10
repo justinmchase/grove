@@ -4,6 +4,11 @@ import { Type } from "@justinmchase/type";
 import type { IContext, IState } from "../../context.ts";
 import type { IMode, IModeOption } from "../mode.interface.ts";
 
+/**
+ * This module provides the web mode for the application.
+ * @module
+ */
+
 type WebArgs = {
   port?: number;
   hostname?: string;

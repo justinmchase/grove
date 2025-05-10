@@ -2,6 +2,11 @@ import type { Type } from "@justinmchase/type";
 import type { IContext } from "../context.ts";
 
 /**
+ * This module provides the IMode and IModeOption interfaces for defining modes in the Grove framework.
+ * @module
+ */
+
+/**
  * IModeOption is the interface that will be used to create the options for each mode.
  */
 export interface IModeOption {

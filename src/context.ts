@@ -2,6 +2,11 @@ import type { State } from "@oak/oak";
 import type { Logger } from "./logging/mod.ts";
 
 /**
+ * This module provides the context and state interface for the Grove framework.
+ * @module
+ */
+
+/**
  * IContext is the interface that will be used to create the application context.
  */
 export interface IContext {

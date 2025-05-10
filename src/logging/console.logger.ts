@@ -11,6 +11,11 @@ import { LogLevel } from "./logLevel.ts";
 import { BaseLogger } from "./base.logger.ts";
 
 /**
+ * This module provides the ConsoleLogger class, which is used to log messages to the console.
+ * @module
+ */
+
+/**
  * ConsoleLogger is a logger that logs messages to the console.
  * It formats the log messages based on the log level and whether the output is a TTY.
  */

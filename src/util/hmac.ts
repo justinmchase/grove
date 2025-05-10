@@ -1,5 +1,10 @@
 import { hexToUint8 } from "./hex.ts";
 
+/**
+ * This module provides functions for creating and using HMAC keys for signing and verifying data.
+ * @module
+ */
+
 type HmacParams = {
   secret?: string;
   keyData?: BufferSource;

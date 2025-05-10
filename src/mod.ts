@@ -1,3 +1,11 @@
+/**
+ * This module provides a set of utilities and services for building
+ * applications using the Grove framework. It includes context management,
+ * controller definitions, error handling, logging, and various utility
+ * functions.
+ * @module
+ */
+
 export * from "./context.ts";
 export * from "./grove.ts";
 

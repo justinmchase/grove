@@ -6,6 +6,11 @@ import { UnexpectedStatusError } from "../errors/mod.ts";
 import { hmacCreateKey, hmacSign } from "../util/hmac.ts";
 import type { LogLevel } from "./logLevel.ts";
 
+/**
+ * This module provides the AzureLogger class, which is used to log messages to Azure Log Analytics.
+ * @module
+ */
+
 type AzureLoggerParams = {
   azureAnalyticsWorkspaceId: string;
   azureAnalyticsWorkspaceSecret: string;

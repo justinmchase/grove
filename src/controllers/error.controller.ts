@@ -3,6 +3,19 @@ import { Controller } from "./controller.ts";
 import type { Application, Context } from "@oak/oak";
 import type { IContext, IState } from "../context.ts";
 
+/**
+ * This module provides the error controller for the Grove framework.
+ * @module
+ */
+/**
+ * ErrorController is a controller that handles errors that occur during the
+ * request lifecycle. It catches errors thrown in the request handler and
+ * formats them into a standard response format. It also logs the error
+ * using the logger in the context.
+ * @template TContext - The type of the context.
+ * @template TState - The type of the state.
+ * @extends {Controller<TContext, TState>} - The base controller class.
+ */
 export class ErrorController<
   TContext extends IContext,
   TState extends IState<TContext>,
