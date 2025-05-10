@@ -2,6 +2,10 @@
   "name": "@justinmchase/grove",
   "version": "0.6.12",
   "license": "MIT",
+  "files": [
+    "mod.ts",
+    "src/**/*"
+  ],
   "exports": {
     ".": "./mod.ts",
     "./controllers": "./src/controllers/mod.ts",
