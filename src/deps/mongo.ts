@@ -18,5 +18,5 @@ export {
   /**
    * @db/mongo module compatible with this version of Grove.
    */
-  mongo
+  mongo,
 };

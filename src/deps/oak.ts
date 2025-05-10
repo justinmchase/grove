@@ -15,9 +15,9 @@ import * as oak from "@oak/oak";
  * ```
  */
 
-export {  
+export {
   /**
    * @oak/oak module compatible with this version of Grove.
    */
-  oak
+  oak,
 };
