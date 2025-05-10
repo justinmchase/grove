@@ -119,12 +119,14 @@ export class StorageService {
     const containerClient = this.client.getContainerClient(container);
     const blobClient = containerClient.getBlobClient(blob);
     const blockClient = await blobClient.getBlockBlobClient();
-    if (!await blockClient.exists())
+    if (!await blockClient.exists()) {
       throw new NotFoundError("Blob", `${container}/${blob}`);
+    }
 
     const download = await blockClient.download();
-    if (!download.readableStreamBody)
+    if (!download.readableStreamBody) {
       throw new EmptyError(`Blob body ${container}/${blob} was not found.`);
+    }
 
     return download.readableStreamBody;
   }
