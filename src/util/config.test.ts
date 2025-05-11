@@ -1,10 +1,12 @@
 import { assertEquals, assertThrows } from "@std/assert";
 import { ConfigError } from "../errors/config.error.ts";
 import {
+  readOptionalBoolean,
   readOptionalInt,
   readOptionalString,
   readRequiredString,
 } from "./config.ts";
+import { readRequiredBoolean } from "./mod.ts";
 
 Deno.test({
   name: "config_readString_00",
@@ -60,6 +62,54 @@ Deno.test({
       ConfigError,
       "Invalid configuration. Key [a] (xyz) is not an integer.",
       "readInt is expected to throw but isn't",
+    );
+  },
+});
+Deno.test({
+  name: "config_readBoolean_00",
+  fn: async (ctx) => {
+    for (const value of ["1", "t", "true", "y", "yes"]) {
+      await ctx.step(`value: ${value}`, () => {
+        const actualOptional = readOptionalBoolean({ value }, "value");
+        const actualRequired = readRequiredBoolean({ value }, "value");
+        assertEquals(
+          { actualOptional, actualRequired },
+          { actualOptional: true, actualRequired: true },
+        );
+      });
+    }
+  },
+});
+Deno.test({
+  name: "config_readBoolean_01",
+  fn: async (ctx) => {
+    for (const value of ["0", "f", "false", "n", "no", "", "anything"]) {
+      await ctx.step(`value: ${value}`, () => {
+        const actualOptional = readOptionalBoolean({ value }, "value");
+        const actualRequired = readRequiredBoolean({ value }, "value");
+        assertEquals(
+          { actualOptional, actualRequired },
+          { actualOptional: false, actualRequired: false },
+        );
+      });
+    }
+  },
+});
+Deno.test({
+  name: "config_readBoolean_02",
+  fn: () => {
+    const actual = readOptionalBoolean({}, "value");
+    assertEquals(actual, undefined);
+  },
+});
+Deno.test({
+  name: "config_readBoolean_03",
+  fn: () => {
+    assertThrows(
+      () => readRequiredBoolean({}, "value"),
+      ConfigError,
+      "Invalid configuration. Key [value] is required.",
+      "readRequiredBoolean is expected to throw but isn't",
     );
   },
 });
