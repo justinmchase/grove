@@ -9,6 +9,9 @@
       "README.md",
       "mod.ts",
       "src/**/*"
+    ],
+    "exclude": [
+      "src/**/*.test.ts"
     ]
   },
   "exports": {
