@@ -1,7 +1,7 @@
 /**
  * This module provides dependencies which are compatible witht he current version of Grove including
  * MongoDB and Oak.
- * @module
+ * @module deps
  */
 
 export * from "./mongo.ts";

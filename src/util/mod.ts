@@ -1,6 +1,6 @@
 /**
  * This module provides utility functions for various operations.
- * @module
+ * @module util
  */
 
 export * from "./cache.ts";

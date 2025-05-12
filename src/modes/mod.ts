@@ -1,7 +1,7 @@
 /**
  * This module provides various modes for the application, including web and job modes.
  * It exports all the necessary functions and interfaces for these modes.
- * @module
+ * @module modes
  */
 
 export * from "./web/mod.ts";

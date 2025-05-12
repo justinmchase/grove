@@ -1,6 +1,6 @@
 /**
  * This module exports various common services used in grove applications.
- * @module
+ * @module services
  */
 
 export * from "./github.service.ts";

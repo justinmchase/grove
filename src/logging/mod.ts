@@ -2,7 +2,7 @@
  * This module provides a logging framework for the application.
  * It includes various loggers such as console, memory, and Azure loggers.
  * The loggers can be used to log messages at different levels (info, warn, error).
- * @module
+ * @module logging
  */
 
 export * from "./aggregate.logger.ts";

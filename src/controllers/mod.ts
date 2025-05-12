@@ -1,10 +1,8 @@
-export * from "./controller.ts";
-
 /**
  * This module exports various controllers used in Grove applications.
  * It includes controllers for error handling, health checks, logging,
  * parsing, and GitHub integration.
- * @module
+ * @module controllers
  */
 
 export * from "./controller.ts";
