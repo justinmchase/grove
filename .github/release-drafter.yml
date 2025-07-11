@@ -20,6 +20,7 @@ version-resolver:
   minor:
     labels:
       - "minor"
+      - "feature"
   patch:
     labels:
       - "patch"
