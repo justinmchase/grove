@@ -1,4 +1,4 @@
-import * as mongo from "@db/mongo";
+import * as mongo from "mongodb";
 
 /**
  * @module
@@ -16,7 +16,7 @@ import * as mongo from "@db/mongo";
 
 export {
   /**
-   * @db/mongo module compatible with this version of Grove.
+   * mongodb module compatible with this version of Grove.
    */
   mongo,
 };

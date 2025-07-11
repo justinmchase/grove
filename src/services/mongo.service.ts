@@ -1,5 +1,5 @@
-import { MongoClient } from "@db/mongo/client";
-import type { Collection, Database, Document } from "@db/mongo";
+import { MongoClient } from "mongodb";
+import type { Collection, Db, Document } from "mongodb";
 import type { Logger } from "../../mod.ts";
 
 /**
@@ -17,7 +17,7 @@ export interface IMongoConfig {
 export class MongoService {
   constructor(
     private readonly client: MongoClient,
-    private readonly db: Database,
+    private readonly db: Db,
   ) {
   }
 
@@ -50,11 +50,13 @@ export class MongoService {
     config: IMongoConfig,
   ): Promise<MongoService> {
     const { mongoConnectionString } = config;
-    const client = new MongoClient();
-    const db = await client.connect(mongoConnectionString);
+    const client = new MongoClient(mongoConnectionString);
+    await client.connect();
+
+    const db = client.db();
     logger.info(
-      `connected to database ${db.name}`,
-      { name: db.name },
+      `connected to database ${db.namespace}`,
+      { name: db.namespace },
     );
     return new MongoService(client, db);
   }
