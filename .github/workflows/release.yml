@@ -51,7 +51,7 @@ jobs:
       - name: Set Version
         run: |
           semver set ${{ needs.draft-release.outputs.resolved_version }}
-          if [ -z $(git status --porcelain) ];
+          if [[ -z $(git status --porcelain) ]]
           then
               echo "no changes to commit."
               exit 0
