@@ -1,5 +1,3 @@
-import { hexToUint8 } from "./hex.ts";
-
 /**
  * This module provides functions for creating and using HMAC keys for signing and verifying data.
  * @module
@@ -58,11 +56,11 @@ export async function hmacVerify(
   hex: string,
   data: BufferSource,
 ): Promise<boolean> {
-  const signature = hexToUint8(hex);
+  const source = Uint8Array.fromHex(hex);
   return await crypto.subtle.verify(
     { name: "HMAC" },
     key,
-    signature,
+    source,
     data,
   );
 }
