@@ -7,6 +7,7 @@
     "jsr:@cliffy/table@1.0.0": "1.0.0",
     "jsr:@justinmchase/github-api@0.5.14": "0.5.14",
     "jsr:@justinmchase/serializable@~0.3.13": "0.3.13",
+    "jsr:@justinmchase/serializable@~0.3.7": "0.3.13",
     "jsr:@justinmchase/type@~0.2.4": "0.2.4",
     "jsr:@oak/commons@1": "1.0.1",
     "jsr:@oak/oak@^17.2.0": "17.2.0",
@@ -14,6 +15,7 @@
     "jsr:@std/assert@^1.0.17": "1.0.19",
     "jsr:@std/assert@^1.0.19": "1.0.19",
     "jsr:@std/async@^1.0.1": "1.2.0",
+    "jsr:@std/async@^1.1.0": "1.2.0",
     "jsr:@std/bytes@1": "1.0.6",
     "jsr:@std/crypto@1": "1.0.5",
     "jsr:@std/data-structures@^1.0.10": "1.0.10",
@@ -74,7 +76,8 @@
     "@justinmchase/github-api@0.5.14": {
       "integrity": "63369bb261878673148f2261fe6e28b9d7db7014a80dcacaf385b5cd37a55a9e",
       "dependencies": [
-        "jsr:@std/async",
+        "jsr:@justinmchase/serializable@~0.3.7",
+        "jsr:@std/async@^1.0.1",
         "jsr:@std/encoding@^1.0.5",
         "jsr:@std/log",
         "jsr:@zaubrik/djwt"
@@ -190,6 +193,7 @@
       "integrity": "87bdc2700fa98249d48a17cd72413352d3d3680dcfbdb64947fd0982d6bbf681",
       "dependencies": [
         "jsr:@std/assert@^1.0.17",
+        "jsr:@std/async@^1.1.0",
         "jsr:@std/data-structures",
         "jsr:@std/fs@^1.0.22",
         "jsr:@std/internal",
