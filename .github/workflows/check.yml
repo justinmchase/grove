@@ -14,9 +14,14 @@ jobs:
         with:
           deno-version: v2.x
 
+      - name: Check versions
+        run: |
+          deno --version
+          npx jsr --version
+
       - run: deno fmt --check
       - run: deno lint
       - run: deno install
       - run: deno test
-      - run: npx jsr publish --dry-run
+      - run: npx jsr publish --dry-run --allow-dirty
       - run: deno run example:job:hello
