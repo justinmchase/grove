@@ -36,7 +36,7 @@
   "imports": {
     "@azure/storage-blob": "npm:@azure/storage-blob@^12.31.0",
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0",
-    "@justinmchase/github-api": "jsr:@justinmchase/github-api@0.5.14",
+    "@justinmchase/github-api": "jsr:@justinmchase/github-api@0.5.17",
     "@justinmchase/serializable": "jsr:@justinmchase/serializable@^0.3.13",
     "@justinmchase/type": "jsr:@justinmchase/type@^0.2.4",
     "@oak/oak": "jsr:@oak/oak@^17.2.0",
