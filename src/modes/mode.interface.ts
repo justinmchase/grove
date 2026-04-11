@@ -7,6 +7,14 @@ import type { IContext } from "../context.ts";
  */
 
 /**
+ * IRunContext provides runtime information passed to a mode when it is executed.
+ */
+export interface IRunContext {
+  /** An optional signal that, when aborted, requests the mode to shut down gracefully. */
+  signal?: AbortSignal;
+}
+
+/**
  * IModeOption is the interface that will be used to create the options for each mode.
  */
 export interface IModeOption {
@@ -49,5 +57,9 @@ export interface IMode<TContext extends IContext> {
    * The function that will be called to run the mode.
    * This function should return a promise that resolves when the mode is done.
    */
-  run(args: unknown, context: TContext): Promise<void>;
+  run(
+    args: unknown,
+    context: TContext,
+    runContext?: IRunContext,
+  ): Promise<void>;
 }

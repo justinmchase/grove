@@ -1,6 +1,7 @@
 import { Command, EnumType } from "@cliffy/command";
 import { Type } from "@justinmchase/type";
 import { NotImplementedError } from "./errors/notimplemented.error.ts";
+import type { IRunContext } from "./modes/mode.interface.ts";
 import type { IContext } from "./context.ts";
 import type { IMode } from "./modes/mod.ts";
 
@@ -28,6 +29,11 @@ export interface IGroveConfig<TContext extends IContext> {
    * Each mode is a command that can be executed.
    */
   modes: IMode<TContext>[];
+  /**
+   * An optional AbortSignal that can be used to shut down the application.
+   * When aborted, running modes (e.g. web server) will stop gracefully.
+   */
+  signal?: AbortSignal;
 }
 
 /**
@@ -156,14 +162,19 @@ export class Grove<TContext extends IContext> {
       .parse(args);
   }
 
-  private async run(args: unknown, context: TContext, mode: IMode<TContext>) {
+  private async run(
+    args: unknown,
+    context: TContext,
+    mode: IMode<TContext>,
+  ) {
     const { name } = mode;
     context.logger.info(`grove running mode ${name}`, {
       mode: name,
       args,
     });
     try {
-      await mode.run(args, context);
+      const runContext: IRunContext = { signal: this.config.signal };
+      await mode.run(args, context, runContext);
     } catch (err) {
       context.logger.error("grove error", err, {
         mode: mode.name,

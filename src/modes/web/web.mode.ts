@@ -2,7 +2,7 @@ import type { Request } from "@oak/oak/request";
 import { Application } from "@oak/oak/application";
 import { Type } from "@justinmchase/type";
 import type { IContext, IState } from "../../context.ts";
-import type { IMode, IModeOption } from "../mode.interface.ts";
+import type { IMode, IModeOption, IRunContext } from "../mode.interface.ts";
 
 /**
  * This module provides the web mode for the application.
@@ -89,8 +89,9 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
    * The mode will run a webserver until closed.
    * @param {WebArgs} args - The arguments that will be passed to the mode.
    * @param {TContext} context - The context that will be passed to the mode.
+   * @param {IRunContext} runContext - Runtime context including optional abort signal.
    */
-  public async run(args: WebArgs, context: TContext) {
+  public async run(args: WebArgs, context: TContext, runContext?: IRunContext) {
     const { port, hostname } = args;
     context.logger.info(`Server starting...`, { port });
     const app = new Application<TState>();
@@ -128,6 +129,6 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
         error,
       );
     });
-    await app.listen({ hostname, port });
+    await app.listen({ hostname, port, signal: runContext?.signal });
   }
 }
