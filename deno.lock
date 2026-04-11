@@ -39,7 +39,7 @@
     "jsr:@zaubrik/djwt@^3.0.2": "3.0.2",
     "npm:@azure/storage-blob@^12.31.0": "12.31.0_@azure+core-client@1.10.1_@azure+core-rest-pipeline@1.23.0",
     "npm:@types/node@*": "22.5.4",
-    "npm:mongodb@^7.1.0": "7.1.0",
+    "npm:mongodb@^7.1.1": "7.1.1",
     "npm:path-to-regexp@^6.3.0": "6.3.0"
   },
   "jsr": {
@@ -413,8 +413,8 @@
         "whatwg-url"
       ]
     },
-    "mongodb@7.1.0": {
-      "integrity": "sha512-kMfnKunbolQYwCIyrkxNJFB4Ypy91pYqua5NargS/f8ODNSJxT03ZU3n1JqL4mCzbSih8tvmMEMLpKTT7x5gCg==",
+    "mongodb@7.1.1": {
+      "integrity": "sha512-067DXiMjcpYQl6bGjWQoTUEE9UoRViTtKFcoqX7z08I+iDZv/emH1g8XEFiO3qiDfXAheT5ozl1VffDTKhIW/w==",
       "dependencies": [
         "@mongodb-js/saslprep",
         "bson",
@@ -1264,7 +1264,7 @@
       "jsr:@std/testing@^1.0.17",
       "jsr:@wok/case@^1.0.3",
       "npm:@azure/storage-blob@^12.31.0",
-      "npm:mongodb@^7.1.0"
+      "npm:mongodb@^7.1.1"
     ]
   }
 }
