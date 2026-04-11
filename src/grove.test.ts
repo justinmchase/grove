@@ -3,7 +3,11 @@ import { assertSpyCall, assertSpyCalls, stub } from "@std/testing/mock";
 import { Grove } from "./grove.ts";
 import { MemoryLogger } from "./logging/mod.ts";
 import { Type } from "@justinmchase/type";
-import type { IMode, IModeOption } from "./modes/mode.interface.ts";
+import type {
+  IMode,
+  IModeOption,
+  IRunContext,
+} from "./modes/mode.interface.ts";
 import type { IContext } from "./context.ts";
 
 function failure(action: () => Promise<void>) {
@@ -53,9 +57,15 @@ class TestMode implements IMode<IContext> {
 
   public didRun = false;
   public args?: Record<string, unknown> = undefined;
-  public async run(args: unknown, _context: IContext): Promise<void> {
+  public runContext?: IRunContext;
+  public async run(
+    args: unknown,
+    _context: IContext,
+    runContext?: IRunContext,
+  ): Promise<void> {
     this.didRun = true;
     this.args = args as Record<string, unknown>;
+    this.runContext = runContext;
     await undefined;
   }
 }
@@ -87,6 +97,26 @@ Deno.test({
     });
     await grove.start(["test"]);
     assert(testMode.didRun);
+  }),
+});
+
+Deno.test({
+  name: "passes configured signal to mode run context",
+  fn: success(async () => {
+    const controller = new AbortController();
+    const testMode = new TestMode("test");
+    const grove = new Grove({
+      initContext: async () => {
+        return await { logger: new MemoryLogger() };
+      },
+      modes: [testMode],
+      signal: controller.signal,
+    });
+
+    await grove.start(["test"]);
+
+    assert(testMode.didRun);
+    assert(testMode.runContext?.signal === controller.signal);
   }),
 });
 
