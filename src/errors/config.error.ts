@@ -1,4 +1,3 @@
-import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 /**
@@ -16,7 +15,7 @@ export class ConfigError extends ApplicationError {
     reason: string,
   ) {
     super(
-      Status.BadRequest,
+      400,
       "E_CONFIGURATION",
       `Invalid configuration. Key [${key}] ${reason}.`,
     );

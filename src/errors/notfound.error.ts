@@ -1,4 +1,3 @@
-import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 /**
@@ -15,7 +14,7 @@ export class NotFoundError extends ApplicationError {
     public readonly id: string,
   ) {
     super(
-      Status.NotFound,
+      404,
       "E_NOT_FOUND",
       `${type} ${id} not found`,
     );

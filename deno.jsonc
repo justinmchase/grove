@@ -39,7 +39,7 @@
     "@justinmchase/github-api": "jsr:@justinmchase/github-api@0.5.17",
     "@justinmchase/serializable": "jsr:@justinmchase/serializable@^0.3.13",
     "@justinmchase/type": "jsr:@justinmchase/type@^0.2.4",
-    "@oak/oak": "jsr:@oak/oak@^17.2.0",
+    "@hono/hono": "jsr:@hono/hono@^4.12.12",
     "@std/assert": "jsr:@std/assert@^1.0.19",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.6",
     "@std/encoding": "jsr:@std/encoding@^1.0.10",

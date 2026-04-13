@@ -34,6 +34,11 @@ export interface IGroveConfig<TContext extends IContext> {
    * When aborted, running modes (e.g. web server) will stop gracefully.
    */
   signal?: AbortSignal;
+  /**
+   * An optional function that will be called when the application is ready to receive requests.
+   * This can be used to perform any setup that needs to happen before the modes are run, such as seeding a database or running migrations.
+   */
+  ready?: () => void | Promise<void>;
 }
 
 /**
@@ -173,7 +178,10 @@ export class Grove<TContext extends IContext> {
       args,
     });
     try {
-      const runContext: IRunContext = { signal: this.config.signal };
+      const runContext: IRunContext = {
+        signal: this.config.signal,
+        ready: this.config.ready,
+      };
       await mode.run(args, context, runContext);
     } catch (err) {
       context.logger.error("grove error", err, {
