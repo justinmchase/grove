@@ -1,7 +1,7 @@
-import type { Request } from "@oak/oak/request";
-import { Application } from "@oak/oak/application";
+import { Hono } from "@hono/hono";
 import { Type } from "@justinmchase/type";
 import type { IContext, IState } from "../../context.ts";
+import type { GroveApp, GroveEnv } from "../../controllers/controller.ts";
 import type { IMode, IModeOption, IRunContext } from "../mode.interface.ts";
 
 /**
@@ -34,7 +34,7 @@ type InitControllers<
   TState extends IState<TContext>,
 > = (
   context: TContext,
-  app: Application<TState>,
+  app: GroveApp<TContext, TState>,
 ) => Promise<void>;
 
 /**
@@ -92,43 +92,27 @@ export class WebMode<TContext extends IContext, TState extends IState<TContext>>
    * @param {IRunContext} runContext - Runtime context including optional abort signal.
    */
   public async run(args: WebArgs, context: TContext, runContext?: IRunContext) {
-    const { port, hostname } = args;
-    context.logger.info(`Server starting...`, { port });
-    const app = new Application<TState>();
-    app.use(async (ctx, next) => {
-      ctx.state.context = context;
+    const port = args.port ?? this.config.port ?? 8000;
+    const hostname = args.hostname ?? this.config.hostname ?? "0.0.0.0";
+    context.logger.info(`Server starting...`, { port, hostname });
+    const app = new Hono<GroveEnv<TContext, TState>>();
+    app.use("*", async (ctx, next) => {
+      ctx.set("state", { context } as TState);
       await next();
     });
     await this.config.initControllers(context, app);
-    app.addEventListener("listen", (_event) => {
-      context.logger.info(
-        `Listening on http://${hostname}:${port}`,
-        { port },
-      );
-    });
-    app.addEventListener("error", (err) => {
-      const { error, timeStamp, message, filename, lineno } = err;
-      const { accepts, hasBody, headers, ips, method, url } =
-        err.context?.request ||
-        {} as Request;
-      context.logger.error(
-        `unexpected server error: ${err.message}`,
-        {
-          timeStamp,
-          message,
-          filename,
-          lineno,
-          accepts,
-          hasBody,
-          headers,
-          ips,
-          method,
-          url,
-          ...error,
-        },
-        error,
-      );
-    });
-    await app.listen({ hostname, port, signal: runContext?.signal });
+
+    context.logger.info(
+      `Listening on http://${hostname}:${port}`,
+      { port, hostname },
+    );
+
+    const server = Deno.serve(
+      { hostname, port, signal: runContext?.signal },
+      app.fetch,
+    );
+
+    await runContext?.ready?.();
+    await server.finished;
   }
 }

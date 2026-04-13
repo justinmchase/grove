@@ -1,7 +1,6 @@
-import { Router, Status } from "@oak/oak";
-import type { Application, Response } from "@oak/oak";
 import type { IContext, IState } from "../context.ts";
 import type { Controller } from "./controller.ts";
+import type { GroveApp, GroveRequestContext } from "./controller.ts";
 
 /**
  * This module provides the health controller for the Grove framework.
@@ -11,25 +10,19 @@ import type { Controller } from "./controller.ts";
 /**
  * A basic health check controller that responds with a 200 OK status and a JSON body at `GET /health`.
  */
-export class HealthController<
-  TContext extends IContext,
-  TState extends IState<TContext>,
-> implements Controller<TContext, TState> {
-  public async use(app: Application<TState>): Promise<void> {
-    const router = new Router();
-    router.get(
-      "/health",
-      async (context, _next) => await this.handler(context.response),
-    );
-    app.use(router.allowedMethods());
-    app.use(router.routes());
+export class HealthController implements Controller {
+  public async use<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(app: GroveApp<TContext, TState>): Promise<void> {
+    app.get("/health", async (ctx) => await this.handler(ctx));
     await undefined;
   }
 
-  private async handler(res: Response) {
-    res.status = Status.OK;
-    res.body = { ok: true };
-    res.headers.set("Content-Type", "application/json");
-    await undefined;
+  private handler<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(ctx: GroveRequestContext<TContext, TState>) {
+    return ctx.json({ ok: true }, 200);
   }
 }

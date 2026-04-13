@@ -1,4 +1,3 @@
-import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 import type { Serializable } from "@justinmchase/serializable";
 
@@ -17,10 +16,10 @@ export class ExpectedError extends ApplicationError {
     public readonly possibilities?: string[],
   ) {
     super(
-      Status.BadRequest,
+      400,
       "E_EXPECTED",
       [
-        `The property ${propertyName} was expected but was actually ${
+        `The property '${propertyName}' was expected but was actually ${
           JSON.stringify(actualValue)
         }`,
         possibilities ? `Possible values include [${possibilities}].` : "",

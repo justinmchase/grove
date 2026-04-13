@@ -1,7 +1,6 @@
-import type { Application, Context } from "@oak/oak";
-import { Status, STATUS_TEXT } from "@oak/oak";
 import type { IContext, IState } from "../context.ts";
 import { Controller } from "./controller.ts";
+import type { GroveApp, GroveRequestContext } from "./controller.ts";
 
 /**
  * This module provides the not found controller for the Grove framework.
@@ -15,21 +14,19 @@ import { Controller } from "./controller.ts";
  * @template TContext - The type of the context.
  * @template TState - The type of the state.
  */
-export class NotFoundController<
-  TContext extends IContext,
-  TState extends IState<TContext>,
-> extends Controller<TContext, TState> {
-  public async use(app: Application<TState>): Promise<void> {
-    app.use(this.handler.bind(this));
+export class NotFoundController extends Controller {
+  public async use<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(app: GroveApp<TContext, TState>): Promise<void> {
+    app.notFound(this.handler.bind(this));
     await undefined;
   }
 
-  private async handler(ctx: Context<TState>, _next: () => Promise<unknown>) {
-    const status = Status.NotFound;
-    const message = STATUS_TEXT[status];
-    ctx.response.status = status;
-    ctx.response.body = { ok: false, message };
-    ctx.response.headers.set("Content-Type", "application/json");
-    await undefined;
+  private handler<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(ctx: GroveRequestContext<TContext, TState>) {
+    return ctx.json({ ok: false, message: "Not Found" }, 404);
   }
 }

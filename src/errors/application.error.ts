@@ -1,5 +1,5 @@
+import type { ContentfulStatusCode } from "@hono/hono/utils/http-status";
 import type { ErrorCode } from "./errorCode.ts";
-import type { Status } from "@oak/oak";
 
 /**
  * This module provides a custom error class for the application.
@@ -15,12 +15,13 @@ import type { Status } from "@oak/oak";
  */
 export class ApplicationError extends Error {
   constructor(
-    public readonly status: Status,
+    public readonly status: ContentfulStatusCode,
     public readonly code: ErrorCode,
     message: string,
     public readonly reason?: string,
     options?: ErrorOptions,
   ) {
     super(message, options);
+    this.name = this.constructor.name ?? "Error";
   }
 }

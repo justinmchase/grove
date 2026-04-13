@@ -1,4 +1,4 @@
-import { Status } from "@oak/oak";
+import type { ContentfulStatusCode } from "@hono/hono/utils/http-status";
 import { ApplicationError } from "./application.error.ts";
 
 /**
@@ -13,11 +13,11 @@ import { ApplicationError } from "./application.error.ts";
 export class UnexpectedStatusError extends ApplicationError {
   constructor(
     public readonly remoteUrl: string,
-    public readonly expectedStatus: Status,
-    public readonly actualStatus: Status,
+    public readonly expectedStatus: ContentfulStatusCode,
+    public readonly actualStatus: number,
   ) {
     super(
-      Status.InternalServerError,
+      500,
       "E_UNEXPECTED_STATUS",
       `Unexpected status ${actualStatus} was received while calling ${remoteUrl}, ${expectedStatus} was expected`,
     );

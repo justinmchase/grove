@@ -1,7 +1,8 @@
-import { Status } from "@oak/oak";
+import { isNumber } from "@justinmchase/type";
 import { Controller } from "./controller.ts";
-import type { Application, Context } from "@oak/oak";
+import type { GroveApp, GroveRequestContext } from "./controller.ts";
 import type { IContext, IState } from "../context.ts";
+import type { ContentfulStatusCode } from "@hono/hono/utils/http-status";
 
 /**
  * This module provides the error controller for the Grove framework.
@@ -16,49 +17,49 @@ import type { IContext, IState } from "../context.ts";
  * @template TState - The type of the state.
  * @extends {Controller<TContext, TState>} - The base controller class.
  */
-export class ErrorController<
-  TContext extends IContext,
-  TState extends IState<TContext>,
-> extends Controller<TContext, TState> {
-  public async use(app: Application<TState>): Promise<void> {
-    app.use(this.handler.bind(this));
+export class ErrorController extends Controller {
+  public async use<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(app: GroveApp<TContext, TState>): Promise<void> {
+    app.onError(this.handler.bind(this));
     await undefined;
   }
 
-  private async handler(ctx: Context<TState>, next: () => Promise<unknown>) {
-    const start = new Date().valueOf();
-    try {
-      await next();
-    } catch (e) {
-      const end = new Date().valueOf();
-      const t = end - start;
-      const ms = `${t}ms`;
-      const err = e instanceof Error
-        ? e
-        : new Error("An unknown error occurred", { cause: e });
-      const { message } = err instanceof Error
-        ? err
-        : { message: "An unknown error occurred" };
-      const { status = Status.InternalServerError, code, reason } =
-        err as unknown as Record<
-          string,
-          unknown
-        >;
-      const { request: { ip, method, url } } = ctx;
-      ctx.response.status = status as Status;
-      ctx.response.body = { ok: false, status, message, code, reason };
-      ctx.response.headers.set("Content-Type", "application/json");
-      ctx.state.context.logger.error(
-        `An unhandled error occurred: ${message}`,
-        err,
-        {
-          status,
-          method,
-          url: `${url}`,
-          ms,
-          ip,
-        },
-      );
-    }
+  private handler<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(
+    e: unknown,
+    ctx: GroveRequestContext<TContext, TState>,
+  ) {
+    const err = e instanceof Error
+      ? e
+      : new Error("An unknown error occurred", { cause: e });
+    const { message } = err;
+    const { status = 500, code, reason } = err as unknown as Record<
+      string,
+      unknown
+    >;
+    const method = ctx.req.method;
+    const url = ctx.req.url;
+    ctx.get("state").context.logger.error(
+      `An unhandled error occurred: ${message}`,
+      err,
+      {
+        status,
+        method,
+        url,
+      },
+    );
+
+    const responseStatus = isNumber(status) ? status : 500;
+    return ctx.json({
+      ok: false,
+      status: responseStatus,
+      message,
+      code,
+      reason,
+    }, responseStatus as ContentfulStatusCode);
   }
 }

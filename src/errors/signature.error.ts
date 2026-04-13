@@ -1,4 +1,3 @@
-import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 /**
@@ -13,7 +12,7 @@ import { ApplicationError } from "./application.error.ts";
 export class SignatureError extends ApplicationError {
   constructor(details?: string) {
     super(
-      Status.Unauthorized,
+      401,
       "E_SIGNATURE",
       "invalid signature",
       details,

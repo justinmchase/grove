@@ -1,6 +1,6 @@
-import type { Application, Request } from "@oak/oak";
 import type { Controller } from "./controller.ts";
 import type { IContext, IState } from "../context.ts";
+import type { GroveApp, GroveRequestContext } from "./controller.ts";
 
 /**
  * This module provides the isHtml controller for the Grove framework.
@@ -20,23 +20,28 @@ import type { IContext, IState } from "../context.ts";
  * @template TState - The type of the state.
  * @extends {Controller<TContext, TState>} - The base controller class.
  */
-export class IsHtmlController<
-  TContext extends IContext,
-  TState extends IState<TContext>,
-> implements Controller<TContext, TState> {
-  public async use(app: Application<TState>): Promise<void> {
-    app.use((ctx, next) => this.handler(ctx.request, ctx.state, next));
+export class IsHtmlController implements Controller {
+  public async use<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(app: GroveApp<TContext, TState>): Promise<void> {
+    app.use("*", (ctx, next) => this.handler(ctx, next));
     await true;
   }
 
-  private async handler(
-    req: Request,
-    state: TState,
+  private async handler<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(
+    ctx: GroveRequestContext<TContext, TState>,
     next: () => Promise<unknown>,
   ) {
     // If requesting from a browser, this will be true. If requesting from curl or an app
     // then request either */* or application/* and the true content type will be added to the header.
-    const isHtml = !!req.accepts("application/*", "text/html");
+    const acceptHeader = ctx.req.header("accept") ?? "";
+    const isHtml = acceptHeader.includes("application/*") ||
+      acceptHeader.includes("text/html");
+    const state = ctx.get("state");
     state.isHtml = isHtml;
     return await next();
   }
