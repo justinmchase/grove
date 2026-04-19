@@ -1,6 +1,5 @@
 import { decodeBase64, encodeBase64 } from "@std/encoding/base64";
 import { type Serializable, toSerializable } from "@justinmchase/serializable";
-import { Status } from "@oak/oak";
 import { BaseLogger } from "./base.logger.ts";
 import { UnexpectedStatusError } from "../errors/mod.ts";
 import { hmacCreateKey, hmacSign } from "../util/hmac.ts";
@@ -118,8 +117,8 @@ export class AzureLogger extends BaseLogger {
     );
 
     const { ok, status } = res;
-    if (!ok || status !== Status.OK) {
-      throw new UnexpectedStatusError(url, Status.OK, status);
+    if (!ok || status !== 200) {
+      throw new UnexpectedStatusError(url, 200, status);
     }
   }
 }

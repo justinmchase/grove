@@ -1,4 +1,3 @@
-import { Status } from "@oak/oak";
 import { ApplicationError } from "./application.error.ts";
 
 /**
@@ -15,7 +14,7 @@ export class NotImplementedError extends ApplicationError {
     public readonly details: string,
   ) {
     super(
-      Status.InternalServerError,
+      500,
       "E_NOT_IMPLEMENTED",
       "not implemented",
     );

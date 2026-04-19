@@ -1,5 +1,3 @@
-import { Router, Status } from "@oak/oak";
-import type { Application, Request, Response } from "@oak/oak";
 import type {
   GitHubDeploymentProtectionRuleEvent,
   GitHubEvent,
@@ -10,6 +8,7 @@ import type {
 import type { GitHubService } from "../services/github.service.ts";
 import type { IContext, IState } from "../context.ts";
 import type { Controller } from "./controller.ts";
+import type { GroveApp, GroveRequestContext } from "./controller.ts";
 import type { Logger } from "../logging/mod.ts";
 
 /**
@@ -31,10 +30,7 @@ export interface IGitHubWebhookConfig {
  * @template TContext - The type of the context.
  * @template TState - The type of the state.
  */
-export abstract class GithubWebhookController<
-  TContext extends IContext,
-  TState extends IState<TContext>,
-> implements Controller<TContext, TState> {
+export abstract class GithubWebhookController implements Controller {
   private readonly githubWebhookPath: string;
   constructor(
     config: IGitHubWebhookConfig,
@@ -43,29 +39,29 @@ export abstract class GithubWebhookController<
     this.githubWebhookPath = config.githubWebhookPath;
   }
 
-  public async use(app: Application<TState>): Promise<void> {
-    const router = new Router<TState>();
-    router.post(
+  public async use<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(app: GroveApp<TContext, TState>): Promise<void> {
+    app.post(
       this.githubWebhookPath,
-      async (context, _next) =>
-        await this.handler(
-          context.state.context.logger,
-          context.request,
-          context.response,
-        ),
+      async (ctx) => await this.handler(ctx),
     );
-    app.use(router.allowedMethods());
-    app.use(router.routes());
     await undefined;
   }
 
-  private async handler(logger: Logger, req: Request, res: Response) {
-    const githubEvent = req.headers.get("X-GitHub-Event") as
+  private async handler<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(ctx: GroveRequestContext<TContext, TState>) {
+    const logger = ctx.get("state").context.logger;
+    const githubEvent = ctx.req.header("X-GitHub-Event") as
       | GitHubEventName
       | "ping"
       | "installation";
-    await this.github.verify(req);
-    const event = await req.body.json() as
+    const bytes = await ctx.req.raw.arrayBuffer();
+    await this.github.verify(ctx.req.raw.headers, bytes);
+    const event = JSON.parse(new TextDecoder().decode(bytes)) as
       | GitHubEvent
       | GitHubDeploymentProtectionRuleEvent;
     const { action, sender, repository } = event;
@@ -84,61 +80,66 @@ export abstract class GithubWebhookController<
       case "ping":
         return await this.handlePingEvent(
           logger,
-          res,
+          ctx,
           event as GitHubPingEvent,
         );
       case "installation":
         return await this.handleInstallationEvent(
           logger,
-          res,
+          ctx,
           event as GitHubInstallationEvent,
         );
       case "deployment_protection_rule":
         return await this.handleDeploymentProtectionRuleEvent(
           logger,
-          res,
+          ctx,
           event as GitHubDeploymentProtectionRuleEvent,
         );
       default:
-        return await this.unsupportedEvent(logger, githubEvent, res, event);
+        return await this.unsupportedEvent(logger, githubEvent, ctx, event);
     }
   }
 
-  protected async unsupportedEvent(
+  protected unsupportedEvent<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(
     logger: Logger,
     githubEvent: string | null,
-    res: Response,
+    ctx: GroveRequestContext<TContext, TState>,
     body: unknown,
-  ) {
+  ): Response {
     logger.warn(
       `The github webhook event ${githubEvent} was recieved but is not supported`,
       { body },
     );
-    res.status = Status.OK;
-    res.body = {
+    return ctx.json({
       ok: true,
-    };
-    await undefined;
+    }, 200);
   }
 
-  protected async handlePingEvent(
+  protected handlePingEvent<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(
     logger: Logger,
-    res: Response,
+    ctx: GroveRequestContext<TContext, TState>,
     event: GitHubPingEvent,
-  ) {
+  ): Response {
     logger.debug(`A ping event was received`, { event });
-    res.status = Status.OK;
-    res.body = {
+    return ctx.json({
       ok: true,
-    };
-    await undefined;
+    }, 200);
   }
 
-  protected async handleInstallationEvent(
+  protected handleInstallationEvent<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(
     logger: Logger,
-    res: Response,
+    ctx: GroveRequestContext<TContext, TState>,
     event: GitHubInstallationEvent,
-  ) {
+  ): Response {
     const { action, installation: { id, app_slug, account: { login } } } =
       event;
     logger.debug(
@@ -150,18 +151,19 @@ export abstract class GithubWebhookController<
         login,
       },
     );
-    res.status = Status.OK;
-    res.body = {
+    return ctx.json({
       ok: true,
-    };
-    await undefined;
+    }, 200);
   }
 
-  protected async handleDeploymentProtectionRuleEvent(
+  protected handleDeploymentProtectionRuleEvent<
+    TContext extends IContext,
+    TState extends IState<TContext>,
+  >(
     logger: Logger,
-    res: Response,
+    ctx: GroveRequestContext<TContext, TState>,
     event: GitHubDeploymentProtectionRuleEvent,
-  ) {
+  ): Response {
     const {
       action,
       event: workflowEvent,
@@ -185,10 +187,8 @@ export abstract class GithubWebhookController<
         login,
       },
     );
-    res.status = Status.OK;
-    res.body = {
+    return ctx.json({
       ok: true,
-    };
-    await undefined;
+    }, 200);
   }
 }

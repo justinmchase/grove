@@ -1,6 +1,6 @@
 import { HelloController } from "./hello/mod.ts";
 import type { Context, State } from "../context.ts";
-import type { Application } from "@oak/oak/application";
+import type { GroveApp } from "../../src/controllers/controller.ts";
 import { ErrorController } from "../../src/controllers/error.controller.ts";
 import { HealthController } from "../../src/controllers/health.controller.ts";
 import { IsHtmlController } from "../../src/controllers/parse.controller.ts";
@@ -9,7 +9,7 @@ import { NotFoundController } from "../../src/controllers/not_found.controller.t
 
 export async function initControllers(
   context: Context,
-  app: Application<State>,
+  app: GroveApp<Context, State>,
 ) {
   const {
     managers: {

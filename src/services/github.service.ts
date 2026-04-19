@@ -3,7 +3,6 @@ import type { GitHubCredentialProvider } from "@justinmchase/github-api";
 import { SignatureError } from "../errors/signature.error.ts";
 import { hmacCreateKey, hmacVerify } from "../util/hmac.ts";
 import { MemoryCache } from "../util/cache.ts";
-import type { Request } from "@oak/oak/request";
 import type { Logger } from "../logging/mod.ts";
 
 /**
@@ -74,21 +73,21 @@ export class GitHubService {
   }
 
   /**
-   * Verifies the webhook signature using the provided request object and the webhook key.
-   * @param req The request object to verify the webhook signature.
+   * Verifies the webhook signature using request headers and raw body bytes.
+   * @param headers The request headers that include the GitHub signature.
+   * @param body The raw request body bytes.
    */
-  public async verify(req: Request) {
+  public async verify(headers: Headers, body: BufferSource) {
     if (this.webhookKey) {
-      const signature = req.headers.get("X-Hub-Signature-256");
+      const signature = headers.get("X-Hub-Signature-256");
       if (!signature) {
         throw new SignatureError("invalid signature");
       }
       const [, sig] = signature.split("=");
-      const bytes = await req.body.arrayBuffer();
       const verified = await hmacVerify(
         this.webhookKey,
         sig,
-        bytes,
+        body,
       );
       if (!verified) {
         throw new SignatureError("signature does not match body");

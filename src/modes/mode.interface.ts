@@ -12,6 +12,9 @@ import type { IContext } from "../context.ts";
 export interface IRunContext {
   /** An optional signal that, when aborted, requests the mode to shut down gracefully. */
   signal?: AbortSignal;
+
+  /** An optional callback that, when provided, should be called by the mode when it is ready to receive requests. */
+  ready?: () => void;
 }
 
 /**
