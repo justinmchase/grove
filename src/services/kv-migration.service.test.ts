@@ -1,12 +1,12 @@
 import { assertEquals } from "@std/assert";
-import { ConsoleLogger } from "../logging/mod.ts";
+import { MemoryLogger } from "../logging/mod.ts";
 import {
   type Migration,
   type MigrationContext,
   MigrationRunner,
 } from "./kv-migration.service.ts";
 
-const SILENT_LOGGER = new ConsoleLogger();
+const SILENT_LOGGER = new MemoryLogger();
 
 interface LegacyRecord {
   id: string;

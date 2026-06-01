@@ -7,7 +7,10 @@
  * A simple in-memory cache implementation.
  */
 export class MemoryCache {
-  private cache: Map<string, { value: unknown; timeout: number }> = new Map();
+  private cache: Map<
+    string,
+    { value: unknown; timeout: ReturnType<typeof setTimeout> }
+  > = new Map();
 
   private set<T>(key: string, value: T, ttl: number = 60000): void {
     if (this.cache.has(key)) {
