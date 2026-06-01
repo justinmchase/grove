@@ -43,17 +43,21 @@ export class ErrorController extends Controller {
     >;
     const method = ctx.req.method;
     const url = ctx.req.url;
-    ctx.get("state").context.logger.error(
-      `An unhandled error occurred: ${message}`,
-      err,
-      {
-        status,
-        method,
-        url,
-      },
-    );
-
     const responseStatus = isNumber(status) ? status : 500;
+    const logger = ctx.get("state").context.logger;
+    if (responseStatus >= 500) {
+      logger.error(
+        `An unhandled error occurred: ${message}`,
+        err,
+        { status: responseStatus, method, url },
+      );
+    } else {
+      logger.warn(
+        `Request failed: ${message}`,
+        { status: responseStatus, method, url, code },
+      );
+    }
+
     return ctx.json({
       ok: false,
       status: responseStatus,
